@@ -5,7 +5,7 @@
  * @brief       ST ITM console debug output implementation.
  * @remark      A part of the Woof Toolkit (WTK).
  *
- * @copyright	(c)2024 CodeDog, All rights reserved.
+ * @copyright	(c)2025 CodeDog, All rights reserved.
  */
 
 #include "LogITM.hpp"
@@ -26,7 +26,7 @@ LogITM::LogITM(ILogMessagePool& pool) :
         while (!isITMReadyToSend()) __NOP();
         sendITM('\n');
     }
-    sendNext(); // In case if the pool already contains unsent messages.
+    send(); // In case if the pool already contains unsent messages.
 }
 
 LogITM *LogITM::getInstance(ILogMessagePool &pool)
@@ -38,55 +38,50 @@ LogITM *LogITM::getInstance(ILogMessagePool &pool)
 void LogITM::startAsync(void)
 {
     if (m_thread.active()) return;
-    m_thread.start(nullptr, senderThreadEntry, "ITM", OS::Thread::Priority::low);
-    // FIXME: Set the portable thread priority value here!
+    m_thread.start(nullptr, senderThreadEntry, "ITM", OS::Thread::Priority::belowNormal);
 }
 
-void LogITM::send(int index)
+void LogITM::send()
 {
-    if (m_isSending || index > m_pool.lastIndex() || !isITMAvailable()) return;
-    LogMessage* msg = m_pool[index];
-    if (!msg || msg->empty()) return;
-    m_isSending = true;
-    m_pool.lastSentIndex(index);
+    m_sendNextImmediately = true;
     if (m_isAsync) sendAsync(); else sendImmediately();
-}
-
-void LogITM::sendNext()
-{
-    if (m_pool.lastSentIndex() < m_pool.lastIndex()) send(m_pool.lastSentIndex(m_pool.lastSentIndex() + 1));
-    else m_pool.clear();
 }
 
 void LogITM::sendImmediately()
 {
-    LogMessage& msg = *m_pool.lastSent();
-    for (size_t i = 0; i < msg.length(); i++)
+    auto msg = m_pool.find(LogMessage::State::qd);
+    if (!msg) return;
+    m_pool.send(msg);
+    for (size_t i = 0; i < msg->length(); i++)
     {
         while (!isITMReadyToSend()) __NOP();
-        sendITM(msg[i]);
+        sendITM((*msg)[i]);
     }
-    msg.clear();
-    m_isSending = false;
-    sendNext();
+    msg->clear();
+    m_pool.toss(msg);
 }
 
 void LogITM::senderThreadEntry(OS::ThreadArg)
 {
     m_instance->m_isAsync = true;
-    while (m_instance->m_semaphore.wait())
+    while (m_instance->m_sendNextImmediately || m_instance->m_semaphore.wait())
     { // When it gets the signal from `sendAsync()` it starts sending the data with yielding the thread after each character...
-        if (m_instance->m_pool.lastSentIndex() < 0) continue;
-        LogMessage& msg = *m_instance->m_pool.lastSent();
-        if (msg.empty()) continue;
-        for (size_t i = 0, n = msg.length(); i < n; ++i)
+        auto msg = m_instance->m_pool.find(LogMessage::State::qd);
+        if (!msg)
+        {
+            m_instance->m_sendNextImmediately = false;
+            continue;
+        }
+        m_instance->m_pool.send(msg);
+        for (size_t i = 0, n = msg->length(); i < n; ++i)
         {
             while (!isITMReadyToSend()) OS::yield();
-            sendITM(msg[i]);
+            sendITM((*msg)[i]);
         }
-        msg.clear();
-        m_instance->m_isSending = false;
-        m_instance->sendNext();
+        msg->clear();
+        m_instance->m_pool.toss(msg);
+        OS::yield();
+        m_instance->m_sendNextImmediately = true;
     } // Then it waits for the next signal.
     m_instance->m_isAsync = false;
 }

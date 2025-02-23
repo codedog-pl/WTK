@@ -5,7 +5,7 @@
  * @brief       A task scheduler that provides scheduling immediate and delayed tasks to the main thread. Implementation.
  * @remark      A part of the Woof Toolkit (WTK), RTOS API.
  *
- * @copyright   (c)2024 CodeDog, All rights reserved.
+ * @copyright   (c)2025 CodeDog, All rights reserved.
  */
 
 #include "TaskScheduler.hpp"
@@ -24,7 +24,7 @@ OS::TaskId OS::TaskScheduler::schedule(void *arg, OptionalBindingAction action, 
             if (time)
                 m_delaySemaphore.release();
             else
-                m_dispatchSemaphore.release();
+                if (context == ThreadContext::application) m_dispatchSemaphore.release();
             return id;
         }
         task.unlock();

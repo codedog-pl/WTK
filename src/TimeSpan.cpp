@@ -5,7 +5,7 @@
  * @brief       A structure to store and manipulate time span values. Header file.
  * @remark      A part of the Woof Toolkit (WTK).
  *
- * @copyright	(c)2024 CodeDog, All rights reserved.
+ * @copyright	(c)2025 CodeDog, All rights reserved.
  */
 
 #include "FloatingPointEq.hpp"
@@ -21,6 +21,8 @@ TimeSpan::TimeSpan(uint16_t hours, uint8_t minutes, double seconds)
 
 TimeSpan::TimeSpan(int days, uint8_t hours, uint8_t minutes, double seconds)
     : m_value(days * 86400.0 + hours * 3600.0 + minutes * 60.0 + seconds) {}
+
+void TimeSpan::reset(void) { m_value = 0; }
 
 double TimeSpan::seconds() const { return std::fmod(std::fabs(m_value), 60.0); }
 

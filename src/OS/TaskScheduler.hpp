@@ -5,7 +5,7 @@
  * @brief       A task scheduler that provides scheduling immediate and delayed tasks to the main thread. Header file.
  * @remark      A part of the Woof Toolkit (WTK), RTOS API.
  *
- * @copyright   (c)2024 CodeDog, All rights reserved.
+ * @copyright   (c)2025 CodeDog, All rights reserved.
  */
 
 #pragma once
@@ -35,10 +35,16 @@ public:
     TaskId schedule(void* arg, OptionalBindingAction action, ThreadContext context = application,
                     TickCount time = 0, TickCount reset = 0);
 
+    /// @brief Resets the delay tick semaphore.
+    void resetDelayTick()
+    {
+        m_delaySemaphore.release();
+    }
+
     /// @brief Starts the task scheduler, immediatelly calls immediate tasks, starts waiting for delayed tasks if any.
     void start(void)
     {
-        m_delayThread.start(this, delayTask, "TaskScheduler::delayTask", ThreadPriority::belowNormal);
+        m_delayThread.start(this, delayTask, "TaskScheduler::delayTask", ThreadPriority::normal);
         if (!immediateCount()) m_dispatchSemaphore.wait();
         for (;;)
         {
@@ -51,7 +57,9 @@ public:
     /// @param id Task identifier reference. Gets zeroed if task canceled.
     inline void cancel(TaskId& id)
     {
+        if (!id) return;
         for (auto& task : m_tasks) if (task.cancel(id, &m_immediate, &m_delayed)) return;
+        id = 0;
     }
 
     void frameTick(void)

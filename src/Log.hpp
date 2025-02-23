@@ -5,7 +5,7 @@
  * @brief       System debug information logger. Header file.
  * @remark      A part of the Woof Toolkit (WTK).
  *
- * @copyright   (c)2024 CodeDog, All rights reserved.
+ * @copyright   (c)2025 CodeDog, All rights reserved.
  */
 
 #pragma once
@@ -77,15 +77,6 @@ public:
     static inline void dumpIndentation(size_t value) { m_dumpIndentation = value; }
 
 protected:
-
-    /// @returns A tuple of:
-    ///             - An empty message from the pool, or `nullptr` when the pool is exhausted.
-    ///             - Message pool offset.
-    static inline std::tuple<LogMessage*, int> getMessage(LogMessage::Severity severity = LogMessage::debug)
-    {
-        if (severity > m_level) return { 0, 0 }; // Don't produce messages above defined severity.
-        return m_pool.get(severity);
-    }
 
     static constexpr size_t dumpIndentationDefault = 24; // Default text indentation for the `dump` method.
 

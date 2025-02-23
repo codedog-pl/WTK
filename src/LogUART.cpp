@@ -5,7 +5,7 @@
  * @brief       HAL UART port debug output implementation.
  * @remark      A part of the Woof Toolkit (WTK).
  *
- * @copyright	(c)2024 CodeDog, All rights reserved.
+ * @copyright	(c)2025 CodeDog, All rights reserved.
  */
 
 #include "LogUART.hpp"
@@ -28,29 +28,23 @@ LogUART *LogUART::getInstance(UART_HandleTypeDef *huart, ILogMessagePool &pool)
     return m_instance = &instance;
 }
 
-void LogUART::send(int index)
+void LogUART::send()
 {
-    if (m_isSending || !m_uart || index > m_pool.lastIndex()) return;
-    LogMessage* message = m_pool[index];
-    if (!message || message->empty()) return;
+    if (m_isSending || !m_uart) return;
+    auto msg = m_pool.find(LogMessage::State::qd);
+    if (!msg) return;
+    m_pool.send(msg);
     m_isSending = true;
-    m_pool.lastSentIndex(index);
-    auto [buffer, length] = message->buffer();
+    auto [buffer, length] = msg->buffer();
     HAL_UART_Transmit_DMA(m_uart, buffer, length);
 }
 
-void LogUART::sendNext()
+void LogUART::tx_complete(UART_HandleTypeDef* huart)
 {
-    if (m_pool.lastSentIndex() < m_pool.lastIndex()) send(m_pool.lastSentIndex(m_pool.lastSentIndex() + 1));
-    else m_pool.clear();
-}
-
-void LogUART::tx_complete(UART_HandleTypeDef *huart)
-{
-    if (!m_instance) return;
-    auto message = m_instance->m_pool.lastSent();
-    if (!message || message->empty()) return;
-    message->clear();
+    auto msg = m_instance->m_pool.findByBuffer(huart->pTxBuffPtr);
+    if (!msg) return;
+    msg->clear();
+    m_instance->m_pool.toss(msg);
     m_instance->m_isSending = false;
-    m_instance->sendNext();
+    m_instance->send();
 }

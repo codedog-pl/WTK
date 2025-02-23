@@ -5,7 +5,7 @@
  * @brief       Log message class. Implementation.
  * @remark      A part of the Woof Toolkit (WTK).
  *
- * @copyright   (c)2024 CodeDog, All rights reserved.
+ * @copyright   (c)2025 CodeDog, All rights reserved.
  */
 
 #include "LogMessage.hpp"

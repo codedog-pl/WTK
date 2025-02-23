@@ -5,7 +5,7 @@
  * @brief       ST ITM console debug output implementation. Header file.
  * @remark      A part of the Woof Toolkit (WTK).
  *
- * @copyright	(c)2024 CodeDog, All rights reserved.
+ * @copyright	(c)2025 CodeDog, All rights reserved.
  */
 
 #pragma once
@@ -47,9 +47,8 @@ public:
     /// @brief Switches to asynchronous operation as soon as the RTOS is started.
     void startAsync(void) override;
 
-    /// @brief Sends a message to the output.
-    /// @param index Message index.
-    void send(int index) override;
+    /// @brief Notifies the output that there's a new message to send.
+    void send() override;
 
 private:
 
@@ -116,6 +115,7 @@ private:
     OS::Semaphore m_semaphore;                  // Sender thread release semaphore.
     bool m_isAsync;                             // True if the sender thread is started (asynchronous mode).
     bool m_isSending;                           // True if the sender thread is busy sending a message.
+    bool m_sendNextImmediately;                 // True if the next message should be sent without waiting for semaphore.
 
     static inline LogITM* m_instance = {};      // Singleton instance pointer for static methods.
 

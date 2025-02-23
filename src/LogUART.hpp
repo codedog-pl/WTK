@@ -5,7 +5,7 @@
  * @brief       HAL UART port debug output implementation. Header file.
  * @remark      A part of the Woof Toolkit (WTK).
  *
- * @copyright	(c)2024 CodeDog, All rights reserved.
+ * @copyright	(c)2025 CodeDog, All rights reserved.
  */
 
 #pragma once
@@ -42,9 +42,8 @@ public:
     /// @returns Singleton instance.
     static inline LogUART* getInstance() { return m_instance; }
 
-    /// @brief Sends a message to the output.
-    /// @param index Message index.
-    void send(int index) override;
+    /// @brief Notifies the output that there's a new message to send.
+    void send() override;
 
 private:
 

@@ -5,7 +5,7 @@
  * @brief       Target RTOS bindings. Header file.
  * @remark      A part of the Woof Toolkit (WTK), RTOS API.
  *
- * @copyright   (c)2024 CodeDog, All rights reserved.
+ * @copyright   (c)2025 CodeDog, All rights reserved.
  */
 
 #pragma once
@@ -21,7 +21,7 @@
 namespace OS
 {
 
-using EventFlags = unsigned long;        // An integer containing event flags of the `EventGroup`.
+using EventFlags = unsigned long;       // An integer containing event flags of the `EventGroup`.
 using TickCount = unsigned int;         // An integer containing a number of RTOS ticks to wait.
 using ThreadArg = unsigned long;        // Thread entry function argument type.
 using ThreadEntry = void(*)(ThreadArg); // Thread entry function pointer type.
@@ -63,6 +63,7 @@ enum ThreadContext : uint32_t
     none,           // No context (uninitialized value).
     application,    // Main application thread, `dispatcherLoop` method.
     frame,          // Display thread, synchronized with display frame, `tick` method.
+    nonISR          // Used to mark any thread except ISR.
 };
 
 /// @brief Task identifier integer. Zero means empty.

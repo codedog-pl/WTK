@@ -5,7 +5,7 @@
  * @brief       Target RTOS bindings. Implementation.
  * @remark      A part of the Woof Toolkit (WTK), RTOS API.
  *
- * @copyright   (c)2024 CodeDog, All rights reserved.
+ * @copyright   (c)2025 CodeDog, All rights reserved.
  */
 
 #include "Crash.hpp"

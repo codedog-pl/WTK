@@ -5,7 +5,7 @@
  * @brief       Common methods for RTOS threads. Implementation.
  * @remark      A part of the Woof Toolkit (WTK), RTOS API.
  *
- * @copyright   (c)2024 CodeDog, All rights reserved.
+ * @copyright   (c)2025 CodeDog, All rights reserved.
  */
 
 #include "ThreadBase.hpp"

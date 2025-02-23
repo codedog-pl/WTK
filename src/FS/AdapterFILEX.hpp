@@ -5,7 +5,7 @@
  * @brief       File system adapter for the Azure RTOS FILEX backend. Header file.
  * @remark      A part of the Woof Toolkit (WTK), File System API.
  *
- * @copyright	(c)2024 CodeDog, All rights reserved.
+ * @copyright	(c)2025 CodeDog, All rights reserved.
  */
 
 #pragma once
@@ -133,6 +133,11 @@ public:
 
 private:
 
+    /// @brief Sets the time used by the file system module from the RTC.
+    /// @remark Must be called before all write operations.
+    /// @return Status.
+    Status timeUpdate() const;
+
     /// @brief Initializes the entry for the use with internal FILEX functions.
     /// @param media Media structure reference.
     /// @param entry Uninitialized directory entry reference.
@@ -143,6 +148,7 @@ private:
     /// @param time FILEX time.
     /// @param dateTime `DateTime` reference.
     static void toDateTime(UINT date, UINT time, DateTime& dateTime);
+
 };
 
 }

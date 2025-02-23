@@ -5,7 +5,7 @@
  * @brief       Tests the file system module. Header only.
  * @remark      A part of the Woof Toolkit (WTK), File System API.
  *
- * @copyright	(c)2024 CodeDog, All rights reserved.
+ * @copyright	(c)2025 CodeDog, All rights reserved.
  */
 
 #pragma once

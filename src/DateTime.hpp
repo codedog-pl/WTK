@@ -5,17 +5,23 @@
  * @brief       A universal, simple date / time storage class. Header only.
  * @remark      A part of the Woof Toolkit (WTK).
  *
- * @copyright	(c)2024 CodeDog, All rights reserved.
+ * @copyright	(c)2025 CodeDog, All rights reserved.
  */
 
 #pragma once
 
 #include <cmath>
+#include <cstddef>
 #include <cstdint>
 #include <ctime>
 #include "TimeSpan.hpp"
 
+/// @brief The year of the compilation date.
+constexpr size_t __year__ =
+    (__DATE__[7] - '0') * 1000 + (__DATE__[8] - '0') * 100 + (__DATE__[9] - '0') * 10 + (__DATE__[10] - '0');
+
 #pragma pack(push, 1)
+
 /// @brief Date and time storage class. Provides comparison operators and validation.
 /// @remarks Binary level compatible with the `DateTimeTypeDef` defined in `datetime.h`.
 struct DateTime
@@ -220,4 +226,5 @@ protected:
     }
 
 };
+
 #pragma pack(pop)

@@ -5,7 +5,7 @@
  * @brief       Declares the file system adapter functions in the `FS` namespace. Header file.
  * @remark      A part of the Woof Toolkit (WTK), File System API.
  *
- * @copyright	(c)2024 CodeDog, All rights reserved.
+ * @copyright	(c)2025 CodeDog, All rights reserved.
  */
 
 #pragma once

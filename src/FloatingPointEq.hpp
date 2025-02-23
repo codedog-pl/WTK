@@ -5,7 +5,7 @@
  * @brief       Defines a single `eq` function that tests if 2 double arguments are approximately equal. Header only.
  * @remark      A part of the Woof Toolkit (WTK).
  *
- * @copyright	(c)2024 CodeDog, All rights reserved.
+ * @copyright	(c)2025 CodeDog, All rights reserved.
  */
 
 #pragma once

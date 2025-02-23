@@ -5,7 +5,7 @@
  * @brief       Declares the types used by the file system adapter.
  * @remark      A part of the Woof Toolkit (WTK), File System API.
  *
- * @copyright	(c)2024 CodeDog, All rights reserved.
+ * @copyright	(c)2025 CodeDog, All rights reserved.
  */
 
 #pragma once
@@ -21,7 +21,7 @@ namespace FS
 
 /// @brief Flags for the file open operation.
 /// @remark Values made to match FATFS flags directly.
-enum class FileMode : uint32_t
+enum FileMode : uint32_t
 {
     none            = 0x00, // No access, fail if the file doesn't exist.
     read            = 0x01, // Read access.
@@ -54,6 +54,8 @@ public:
 
     static constexpr size_t lfnMaxLength = FX_MAX_LONG_NAME_LEN;    // Maximum length of the path string.
     static constexpr Status OK = FX_SUCCESS;                        // Successful operation status.
+    static constexpr Status ERROR = FX_IO_ERROR;                    // Error operation status.
+
     static constexpr FileOffset offsetMax = -1UL;                   // Last possible file offset.
 
 #elif defined(USE_FATFS)

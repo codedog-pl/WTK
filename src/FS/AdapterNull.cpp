@@ -8,7 +8,7 @@
  * @remarks     Used as a template for concrete file system adapters or as a template for a new file system adapter.
  *              Simulates Linux /dev/null device.
  *
- * @copyright	(c)2024 CodeDog, All rights reserved.
+ * @copyright	(c)2025 CodeDog, All rights reserved.
  */
 
 #include "target.h"

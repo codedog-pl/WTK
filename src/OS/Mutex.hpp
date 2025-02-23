@@ -5,7 +5,7 @@
  * @brief       An object that provides mutually exclusive access to a resource. Header file.
  * @remark      A part of the Woof Toolkit (WTK), RTOS API.
  *
- * @copyright   (c)2024 CodeDog, All rights reserved.
+ * @copyright   (c)2025 CodeDog, All rights reserved.
  */
 
 #pragma once
@@ -16,7 +16,7 @@ namespace OS
 {
 
 /// @brief Defines an object that provides mutually exclusive access to a resource.
-class  Mutex
+class  Mutex final
 {
 
 public:
@@ -48,6 +48,31 @@ private:
     StaticSemaphore_t m_buffer; // A statically allocated buffer for the data.
     SemaphoreHandle_t m_handle; // A pointer used to access the data.
 #endif
+
+};
+
+/// @brief Defines a RAII mutex lock.
+class MutexLock final
+{
+
+public:
+
+    /// @brief Creates a RAII mutex lock over an existing mutex.
+    /// @param mutex Mutex refernce.
+    MutexLock(Mutex& mutex) : m_mutex(mutex)
+    {
+        m_mutex.acquire();
+    };
+
+    /// @brief Releases the mutex when the lock goes out of scope.
+    ~MutexLock()
+    {
+        m_mutex.release();
+    }
+
+private:
+
+    Mutex& m_mutex; // Mutex backend reference.
 
 };
 

@@ -5,7 +5,7 @@
  * @brief       File system adapter for the FATFS backend. Implementation.
  * @remark      A part of the Woof Toolkit (WTK), File System API.
  *
- * @copyright	(c)2024 CodeDog, All rights reserved.
+ * @copyright	(c)2025 CodeDog, All rights reserved.
  */
 
 #include "target.h"

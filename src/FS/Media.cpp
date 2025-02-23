@@ -6,7 +6,7 @@
  *              Defines C bindings for the file system media services.
  * @remark      A part of the Woof Toolkit (WTK), File System API
  *
- * @copyright	(c)2024 CodeDog, All rights reserved.
+ * @copyright	(c)2025 CodeDog, All rights reserved.
  */
 
 #include "OS/AppThread.hpp"
@@ -16,6 +16,7 @@
 
 #if defined(USE_FILEX)
 #include "fx_api.h"
+#include "fx_stm32_sd_driver.h"
 #elif defined(USE_FATFS)
 #include "fatfs.h"
 #endif
@@ -64,8 +65,66 @@ bool FS::MediaServices::format(const char* root, MediaFormat format, const char 
     size_t bufferSize = 2 * _MAX_SS;
     char buffer[2 * _MAX_SS];
     return f_mkfs(root, opt, 0, buffer, bufferSize) == FR_OK;
-#elif defined(USE_FILEX)
-
+#elif defined(USE_FILEX_) // Not implemented yet, code below doesn't work.
+    auto entry = const_cast<FileSystem*>(FileSystemTable::find(root));
+    if (!entry) return false;
+    auto config = getConfiguration(root);
+    if (!config) return false;
+    auto media = entry->media();
+//    media->fx_media_driver_request = FX_DRIVER_INIT;
+    void(*driver)(FX_MEDIA* media_ptr) = (void(*)(FX_MEDIA*))config->driver;
+//    driver(media);
+//    if (media->fx_media_driver_status != FX_SUCCESS) return false;
+    ULONG totalSectors = media->fx_media_total_sectors;
+    UINT bytesPerSector = media->fx_media_bytes_per_sector;
+    UINT sectorsPerCluster = media->fx_media_sectors_per_cluster;
+    UINT directoryEntries = media->fx_media_root_directory_entries;
+    UINT heads = media->fx_media_heads;
+    UINT sectorsPerTrack = media->fx_media_sectors_per_track;
+    UINT volumeSerialNumber = 42;
+    UINT boundaryUnit = 128;
+//    fx_media_close(media);
+    constexpr size_t bufferSize = FX_MAX_SECTOR_CACHE;
+    char buffer[bufferSize];
+    switch (format)
+    {
+    case MediaFormat::DEFAULT:
+    case MediaFormat::ExFAT:
+        return fx_media_exFAT_format(
+            media,
+            driver,
+            nullptr,
+            (UCHAR*)buffer,
+            bufferSize,
+            (char*)label,
+            FX_NUMBER_OF_FATS,
+            FX_HIDDEN_SECTORS,
+            totalSectors,
+            bytesPerSector,
+            sectorsPerCluster,
+            volumeSerialNumber,
+            boundaryUnit
+        ) == FX_SUCCESS;
+        break;
+    default:
+        return fx_media_format(
+            media,
+            driver,
+            nullptr,
+            (UCHAR*)buffer,
+            bufferSize,
+            (char*)label,
+            FX_NUMBER_OF_FATS,
+            directoryEntries, // directory entries
+            FX_HIDDEN_SECTORS,
+            totalSectors,
+            bytesPerSector,
+            sectorsPerCluster,
+            heads,
+            sectorsPerTrack
+        ) == FX_SUCCESS;
+        break;
+    }
 #endif
     return false; // Not implemented yet.
 }
@@ -113,7 +172,7 @@ bool FS::MediaServices::umount(Media &media)
 }
 
 void FS::MediaServices::notifyChanged()
-{
+{   // ISR!
     if (mountNotify) OS::AppThread::sync(mountNotify);
 }
 

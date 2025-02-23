@@ -6,7 +6,7 @@
  *              Defines a set of classes and functions to create, manage and await asynchronous operations.
  * @remark      A part of the Woof Toolkit (WTK).
  *
- * @copyright   (c)2024 CodeDog, All rights reserved.
+ * @copyright   (c)2025 CodeDog, All rights reserved.
  */
 
 #pragma once
@@ -203,8 +203,11 @@ namespace Async
 
 /// @brief Creates a new asynchronous result that doesn't pass a value.
 /// @returns Asynchronous result pointer.
-inline AsyncResult* createResult() {
+inline AsyncResult* createResult()
+{
+    __disable_irq();
     auto instance = pool.take();
+    __enable_irq();
     return new(instance) AsyncResult;
 }
 
@@ -214,7 +217,9 @@ inline AsyncResult* createResult() {
 template<typename T>
 inline AsyncResultT<T>* createResult()
 {
+    __disable_irq();
     auto instance = pool.take();
+    __enable_irq();
     return new(instance) AsyncResultT<T>;
 }
 

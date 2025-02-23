@@ -5,7 +5,7 @@
  * @brief       A set of macros and templates for using `enum` types as bit flags.
  * @remark      A part of the Woof Toolkit (WTK).
  *
- * @copyright	(c)2024 CodeDog, All rights reserved.
+ * @copyright	(c)2025 CodeDog, All rights reserved.
  */
 
 #pragma once
@@ -33,7 +33,7 @@
 /// @brief Negates all bits of the enumeration value.
 /// @param a Operand.
 /// @returns Bitwise operation result.
-BIT_FLAGS_TEMPLATE TEnum operator~(const TEnum a)
+BIT_FLAGS_TEMPLATE constexpr TEnum operator~(const TEnum a)
 {
     using TValue = typename std::underlying_type<TEnum>::type;
     return static_cast<TEnum>(~static_cast<TValue>(a));
@@ -43,7 +43,7 @@ BIT_FLAGS_TEMPLATE TEnum operator~(const TEnum a)
 /// @param a First operand.
 /// @param b Second operand.
 /// @returns Bitwise operation result.
-BIT_FLAGS_TEMPLATE TEnum operator&(const TEnum a, const TEnum b)
+BIT_FLAGS_TEMPLATE constexpr TEnum operator&(const TEnum a, const TEnum b)
 {
     using TValue = typename std::underlying_type<TEnum>::type;
     return static_cast<TEnum>(static_cast<TValue>(a) & static_cast<TValue>(b));
@@ -53,7 +53,7 @@ BIT_FLAGS_TEMPLATE TEnum operator&(const TEnum a, const TEnum b)
 /// @param a First operand.
 /// @param b Second operand.
 /// @returns Bitwise operation result.
-BIT_FLAGS_TEMPLATE TEnum operator|(const TEnum a, const TEnum b)
+BIT_FLAGS_TEMPLATE constexpr TEnum operator|(const TEnum a, const TEnum b)
 {
     using TValue = typename std::underlying_type<TEnum>::type;
     return static_cast<TEnum>(static_cast<TValue>(a) | static_cast<TValue>(b));
@@ -63,7 +63,7 @@ BIT_FLAGS_TEMPLATE TEnum operator|(const TEnum a, const TEnum b)
 /// @param a First operand.
 /// @param b Second operand.
 /// @returns Bitwise operation result.
-BIT_FLAGS_TEMPLATE TEnum operator^(const TEnum a, const TEnum b)
+BIT_FLAGS_TEMPLATE constexpr TEnum operator^(const TEnum a, const TEnum b)
 {
     using TValue = typename std::underlying_type<TEnum>::type;
     return static_cast<TEnum>(static_cast<TValue>(a) ^ static_cast<TValue>(b));
@@ -73,7 +73,7 @@ BIT_FLAGS_TEMPLATE TEnum operator^(const TEnum a, const TEnum b)
 /// @param a First operand reference.
 /// @param b Second operand.
 /// @returns First operand reference.
-BIT_FLAGS_TEMPLATE TEnum& operator&=(TEnum& a, const TEnum b)
+BIT_FLAGS_TEMPLATE constexpr TEnum& operator&=(TEnum& a, const TEnum b)
 {
     using TValue = typename std::underlying_type<TEnum>::type;
     return a = static_cast<TEnum>(static_cast<TValue>(a) & static_cast<TValue>(b));
@@ -83,7 +83,7 @@ BIT_FLAGS_TEMPLATE TEnum& operator&=(TEnum& a, const TEnum b)
 /// @param a First operand reference.
 /// @param b Second operand.
 /// @returns First operand reference.
-BIT_FLAGS_TEMPLATE TEnum& operator|=(TEnum& a, const TEnum b)
+BIT_FLAGS_TEMPLATE constexpr TEnum& operator|=(TEnum& a, const TEnum b)
 {
     using TValue = typename std::underlying_type<TEnum>::type;
     return a = static_cast<TEnum>(static_cast<TValue>(a) | static_cast<TValue>(b));
@@ -93,7 +93,7 @@ BIT_FLAGS_TEMPLATE TEnum& operator|=(TEnum& a, const TEnum b)
 /// @param a First operand reference.
 /// @param b Second operand.
 /// @returns First operand reference.
-BIT_FLAGS_TEMPLATE TEnum& operator^=(TEnum& a, const TEnum b)
+BIT_FLAGS_TEMPLATE constexpr TEnum& operator^=(TEnum& a, const TEnum b)
 {
     using TValue = typename std::underlying_type<TEnum>::type;
     return a = static_cast<TEnum>(static_cast<TValue>(a) ^ static_cast<TValue>(b));
@@ -105,10 +105,19 @@ BIT_FLAGS_TEMPLATE TEnum& operator^=(TEnum& a, const TEnum b)
 namespace BF
 {
 
+/// @brief Implicitly casts the bit flag enumeration value to bool if any bit of it is set.
+/// @param value The value to cast.
+/// @returns True if any bit of the value is set.
+BIT_FLAGS_TEMPLATE inline bool isAnyBitSet(const TEnum& value)
+{
+    using TValue = typename std::underlying_type<TEnum>::type;
+    return static_cast<TValue>(value) != 0;
+}
+
 /// @brief Sets bits.
 /// @param what Bits to set.
 /// @param where Target.
-BIT_FLAGS_TEMPLATE void set(TEnum what, TEnum& where)
+BIT_FLAGS_TEMPLATE inline void set(const TEnum what, TEnum& where)
 {
     where |= what;
 }
@@ -116,7 +125,7 @@ BIT_FLAGS_TEMPLATE void set(TEnum what, TEnum& where)
 /// @brief Clears bits.
 /// @param what Bits to clear.
 /// @param where Target.
-BIT_FLAGS_TEMPLATE void clear(TEnum what, TEnum& where)
+BIT_FLAGS_TEMPLATE inline void clear(const TEnum what, TEnum& where)
 {
     where &= ~what;
 }
@@ -126,10 +135,10 @@ BIT_FLAGS_TEMPLATE void clear(TEnum what, TEnum& where)
 /// @param where Target.
 /// @param clear 0: Leave target alone. 1: Clear flags specified.
 /// @returns True if at least one of the specified bits is set in the `target`, false otherwise.
-BIT_FLAGS_TEMPLATE bool isSet(TEnum what, TEnum& where, bool clear = false)
+BIT_FLAGS_TEMPLATE inline bool isSet(const TEnum what, TEnum& where, bool clear = false)
 {
-    if (!clear) return (where & what) != 0;
-    bool result = (where & what) != 0;
+    if (!clear) return isAnyBitSet(where & what);
+    bool result = isAnyBitSet(where & what);
     where &= ~what;
     return result;
 }

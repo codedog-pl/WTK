@@ -5,7 +5,7 @@
  * @brief       A structure to store and manipulate time span values. Header file.
  * @remark      A part of the Woof Toolkit (WTK).
  *
- * @copyright	(c)2024 CodeDog, All rights reserved.
+ * @copyright	(c)2025 CodeDog, All rights reserved.
  */
 
 #pragma once
@@ -27,6 +27,9 @@ struct TimeSpan
 
     /// @brief Creates a time span from days, hours, minutes and seconds.
     TimeSpan(int days, uint8_t hours, uint8_t minutes, double seconds);
+
+    /// @brief Resets the time span to zero.
+    void reset(void);
 
     /// @returns Seconds component of the time span.
     double seconds() const;

@@ -5,7 +5,7 @@
  * @brief       File system adapter for the Azure RTOS FILEX backend. Implementation.
  * @remark      A part of the Woof Toolkit (WTK), File System API.
  *
- * @copyright	(c)2024 CodeDog, All rights reserved.
+ * @copyright	(c)2025 CodeDog, All rights reserved.
  */
 
 #include "target.h"
@@ -17,6 +17,7 @@
 
 #include "bindings.h"
 EXTERN_C_BEGIN
+#include "datetime.h"
 #include "fx_directory.h"
 EXTERN_C_END
 #include <cstring>
@@ -49,6 +50,7 @@ FS::AdapterTypes::Status FS::AdapterFILEX::modified(Media &media, const char *pa
 
 FS::AdapterTypes::Status FS::AdapterFILEX::fileCreate(Media &media, const char *path) const
 {
+    timeUpdate();
     return fx_file_create(&media, (CHAR*)path);
 }
 
@@ -64,7 +66,7 @@ FS::AdapterTypes::Status FS::AdapterFILEX::fileOpen(Media &media, FileControlBlo
 {
     UINT fxMode = 0;
     UINT fxStatus = FX_SUCCESS;
-
+    if ((mode & write) || (mode & createNew)) timeUpdate();
     if (mode & read) fxMode = (mode & write) ? FX_OPEN_FOR_READ : FX_OPEN_FOR_READ_FAST;
     else if (mode & write) fxMode = FX_OPEN_FOR_WRITE;
     if (mode & createNew)
@@ -93,21 +95,26 @@ FS::AdapterTypes::Status FS::AdapterFILEX::fileSeek(FileControlBlock &file, File
 
 FS::AdapterTypes::Status FS::AdapterFILEX::fileRead(FileControlBlock &file, void *buffer, size_t size, size_t &bytesRead) const
 {
-    return fx_file_read(&file, buffer, size, (ULONG*)&bytesRead);
+    auto result = fx_file_read(&file, buffer, size, (ULONG*)&bytesRead);
+    if (result == FX_END_OF_FILE) result = FX_SUCCESS;
+    return result;
 }
 
 FS::AdapterTypes::Status FS::AdapterFILEX::fileWrite(FileControlBlock &file, const void *buffer, size_t size) const
 {
+    timeUpdate();
     return fx_file_write(&file, const_cast<void*>(buffer), size);
 }
 
 FS::AdapterTypes::Status FS::AdapterFILEX::fileClose(FileControlBlock &file) const
 {
+    timeUpdate();
     return fx_file_close(&file);
 }
 
 FS::AdapterTypes::Status FS::AdapterFILEX::fileRename(Media &media, const char *oldName, const char *newName) const
 {
+    timeUpdate();
     return fx_file_rename(&media, (CHAR*)oldName, (CHAR*)newName);
 }
 
@@ -118,6 +125,7 @@ FS::AdapterTypes::Status FS::AdapterFILEX::fileDelete(Media &media, const char *
 
 FS::AdapterTypes::Status FS::AdapterFILEX::directoryCreate(Media &media, const char *path) const
 {
+    timeUpdate();
     return fx_directory_create(&media, (CHAR*)path);
 }
 
@@ -131,12 +139,24 @@ FS::AdapterTypes::Status FS::AdapterFILEX::directoryExists(Media &media, const c
 
 FS::AdapterTypes::Status FS::AdapterFILEX::directoryRename(Media &media, const char *oldName, const char *newName) const
 {
+    timeUpdate();
     return fx_directory_rename(&media, (CHAR*)oldName, (CHAR*)newName);
 }
 
 FS::AdapterTypes::Status FS::AdapterFILEX::directoryDelete(Media &media, const char *path) const
 {
     return fx_directory_delete(&media, (CHAR*)path);
+}
+
+FS::AdapterTypes::Status FS::AdapterFILEX::timeUpdate() const
+{
+    DateTimeTypeDef dt = {};
+    Status status = RTC_GetDateTime(&dt) == HAL_OK ? OK : ERROR;
+    if (status != OK) return status;
+    status = fx_system_date_set(dt.date.y, dt.date.m, dt.date.d);
+    if (status != OK) return status;
+    status = fx_system_time_set(dt.time.h, dt.time.m, dt.time.s);
+    return status;
 }
 
 FS::AdapterTypes::Status FS::AdapterFILEX::initializeEntry(Media &media, DirectoryEntry &entry)

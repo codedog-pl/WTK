@@ -4,7 +4,7 @@
  *
  * @brief       Crashes the application for debugging on unrecoverable error.
  *
- * @copyright   (c)2024 CodeDog, All rights reserved.
+ * @copyright   (c)2025 CodeDog, All rights reserved.
  */
 
 #pragma once

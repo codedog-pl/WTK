@@ -5,7 +5,7 @@
  * @brief       Declares an interface for the system log message pool.
  * @remark      A part of the Woof Toolkit (WTK).
  *
- * @copyright   (c)2024 CodeDog, All rights reserved.
+ * @copyright   (c)2025 CodeDog, All rights reserved.
  */
 
 #pragma once
@@ -20,59 +20,44 @@ class ILogMessagePool
 
 public:
 
-    ILogMessagePool() : m_lastIndex(-1), m_lastSent(0) { }
-
     /// @returns The message pool capacity.
     virtual size_t size() = 0;
 
-    /// @brief Gets an empty, initialized message from the pool if available.
-    /// @param severity Message severity to request.
-    /// @returns A tuple of:
-    ///             - Message pointer or `nullptr` if the pool is exhausted.
-    ///             - The index of the message in the pool.
-    virtual std::tuple<LogMessage*, int> get(LogMessage::Severity severity = LogMessage::debug) = 0;
+    /// @param state Message state to count.
+    /// @returns The number of messages in the pool having the specified state.
+    virtual size_t count(LogMessage::State state) = 0;
 
-    /// @brief Resets the pool with setting the last index to -1, to start adding new messages to the beginning of the pool.
-    void clear()
-    {
-        m_lastIndex = -1;
-        m_lastSent = -1;
-    }
+    /// @brief Finds a message with specified state starting from the beginning of the pool array.
+    /// @param state Requested message state.
+    /// @returns A message pointer or `nullptr` if not found.
+    virtual LogMessage* find(LogMessage::State state) = 0;
 
-    /// @returns The index of the last message taken from the pool.
-    int lastIndex()
-    {
-        return m_lastIndex;
-    }
+    /// @brief Finds a messsage by its buffer pointer.
+    /// @param ptr Buffer pointer.
+    /// @return Message pointer or `nullptr` if not found.
+    virtual LogMessage* findByBuffer(const uint8_t* ptr) = 0;
 
-    /// @returns The last message sent pointer.
-    LogMessage* lastSent()
-    {
-        return m_lastSent < 0 ? nullptr : (*this)[m_lastSent];
-    }
+    /// @brief Finds a free message in the pool and marks it as taken if found.
+    /// @param severity Message severity to set, default: debug.
+    /// @returns A message pointer or `nullptr` if not found.
+    virtual LogMessage* grab(LogMessage::Severity severity = LogMessage::Severity::debug) = 0;
 
-    /// @returns The index of the last message that was sent from the pool.
-    int lastSentIndex()
-    {
-        return m_lastSent;
-    }
+    /// @brief Adds the message to the send queue.
+    /// @param message Message pointer.
+    virtual void queue(LogMessage* message) = 0;
 
-    /// @brief Sets the last sent message index.
-    /// @returns The new index of the last message that was sent from the pool.
-    int lastSentIndex(int newIndex)
-    {
-        m_lastSent = newIndex;
-        return m_lastSent;
-    }
+    /// @brief Sets the message state to `sent`, making it effectively "in transit".
+    /// @param message Message pointer.
+    virtual void send(LogMessage* message) = 0;
+
+    /// @brief Sets the pointed message as free again.
+    /// @param message Message pointer.
+    virtual void toss(LogMessage* message) = 0;
 
     /// @returns The element pointer at index, or nullptr on index out of bounds.
     virtual const LogMessage* operator[](size_t index) const = 0;
 
     /// @returns The element pointer at index, or nullptr on index out of bounds.
     virtual LogMessage* operator[](size_t index) = 0;
-
-protected:
-    int m_lastIndex;                // Last index used, -1 if no message was taken.
-    int m_lastSent;                 // Last sent message index.
 
 };

@@ -5,7 +5,7 @@
  * @brief       Log message class. Header file.
  * @remark      A part of the Woof Toolkit (WTK).
  *
- * @copyright   (c)2024 CodeDog, All rights reserved.
+ * @copyright   (c)2025 CodeDog, All rights reserved.
  */
 
 #pragma once
@@ -15,14 +15,18 @@
 #include <cstdint>
 #include "DateTimeEx.hpp"
 
-/// @brief System log message class.
+#pragma pack(push, 1)
+/// @brief System log message class. The instance takes (WTK_LOG_MSG_SIZE + 12) bytes.
 class LogMessage final
 {
 
 public:
 
     /// @brief Message severity level.
-    enum Severity : uint8_t { error, warning, info, debug, detail, spam };
+    enum Severity : uint16_t { error, warning, info, debug, detail, spam };
+
+    /// @brief Current message state.
+    enum State : uint16_t { free, taken, qd, sent };
 
     /// @brief Contains packed buffer pointer and size.
     using Buffer = std::pair<const uint8_t*, size_t>;
@@ -89,11 +93,19 @@ public:
     inline uint8_t* operator[](size_t index) { return index < m_length ? &m_buffer[index] : nullptr; }
 
 private:
+
+friend class ILogMessagePool;
+template<int TSize> friend class LogMessagePool;
+
     static constexpr int size = WTK_LOG_MSG_SIZE;                       // Pre-configured message size in bytes.
     static constexpr const char* dateTimeFormat = ISO_DATE_TIME_MS_F;   // Date format for messages.
+
     Severity m_severity = debug;                                        // Message severity level.
+    State m_state = free;                                               // Current message state.
+
     size_t m_length = 0;                                                // Current buffer length.
     int m_offset = 0;                                                   // Current message offset.
     uint8_t m_buffer[size]{};                                           // Message buffer.
 
 };
+#pragma pack(pop)

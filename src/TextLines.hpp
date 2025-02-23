@@ -5,7 +5,7 @@
  * @brief       Provides a fixed number of fixed length text lines that can be stored in a text file. Header only.
  * @remark      A part of the Woof Toolkit (WTK).
  *
- * @copyright   (c)2024 CodeDog, All rights reserved.
+ * @copyright   (c)2025 CodeDog, All rights reserved.
  */
 
 #pragma once
@@ -24,9 +24,11 @@ class TextLines
 public:
 
     using Line = TextBuffer<TLength>; // Single line buffer type.
-    using ThisType = TextLines<TNum, TLength>;
-    using ValueType = Line;
-    using Iterator = IndexIterator<ThisType>;
+    using this_type = TextLines<TNum, TLength>;
+    using value_type = Line;
+    using iterator = IndexIterator<this_type>;
+    using const_iterator = IndexIterator<const this_type>;
+
 
     static constexpr size_t lineCapacity = TNum;    // The number of lines this type can store.
     static constexpr size_t lineSize = TLength;     // The number of characters in an individual line.
@@ -45,10 +47,15 @@ public:
     inline const Line& operator[](size_t index) const { return index < TNum ? m_data[index] : m_sentinel; }
 
     /// @returns The starting iterator for the forward only range of elements.
-    inline Iterator begin() { return Iterator(this, 0); }
+    inline iterator begin() { return iterator(*this, 0); }
+
+    /// @returns The starting iterator for the forward only range of elements.
+    inline const_iterator begin() const { return const_iterator(*this, 0); }
 
     /// @returns Excluded end interator for the forward only range of elements.
-    inline Iterator end() { return Iterator(this, m_count); }
+    inline iterator end() { return iterator(*this, m_count); }
+
+    inline const_iterator end() const { return iterator(*this, m_count); }
 
     /// @returns The number of lines set.
     inline size_t count() const { return m_count; }

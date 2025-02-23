@@ -5,7 +5,7 @@
  * @brief       RAII file access API. Implementation.
  * @remark      A part of the Woof Toolkit (WTK), File System API.
  *
- * @copyright	(c)2024 CodeDog, All rights reserved.
+ * @copyright	(c)2025 CodeDog, All rights reserved.
  */
 
 #include "File.hpp"
@@ -59,14 +59,16 @@ bool FS::File::seek(FileOffset offset)
 
 FS::ReadResult FS::File::read(void *buffer, size_t size)
 {
-    if (!m_isOpen || !buffer || !size) return ReadResult();
-    size_t bytesRead;
+    if (!m_isOpen || !buffer) return ReadResult();
+    if (!size) return ReadResult(0);
+    size_t bytesRead = 0;
     return adapter.fileRead(m_file, buffer, size, bytesRead) == OK ? ReadResult(bytesRead) : ReadResult();
 }
 
 bool FS::File::write(const void *buffer, size_t size)
 {
-    if (!m_isOpen || !buffer || !size) return false;
+    if (!m_isOpen || !buffer) return false;
+    if (!size) return true;
     return adapter.fileWrite(m_file, buffer, size) == OK;
 }
 

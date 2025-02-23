@@ -5,7 +5,7 @@
  * @brief       A scheduled task wrapper to be used for resettable and cancellable timeouts. Implementation.
  * @remark      A part of the Woof Toolkit (WTK), RTOS API.
  *
- * @copyright	(c)2024 CodeDog, All rights reserved.
+ * @copyright	(c)2025 CodeDog, All rights reserved.
  */
 
 #include "AppThread.hpp"

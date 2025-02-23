@@ -5,7 +5,7 @@
  * @brief       An object that provides mutually exclusive access to a resource.
  * @remark      A part of the Woof Toolkit (WTK), RTOS API.
  *
- * @copyright   (c)2024 CodeDog, All rights reserved.
+ * @copyright   (c)2025 CodeDog, All rights reserved.
  */
 
 #include "Mutex.hpp"

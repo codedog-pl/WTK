@@ -7,25 +7,24 @@
  *
  * @remarks     Use if required buffer size is known at compile time / for stack allocations.
  *
- * @copyright   (c)2024 CodeDog, All rights reserved.
+ * @copyright   (c)2025 CodeDog, All rights reserved.
  */
 
 #pragma once
 
+#include <array>
+#include <algorithm>
 #include <cstdarg>
 #include <cstdint>
 #include <cstdio>
 #include <cstring>
-#include <algorithm>
-#include "IData.hpp"
+#include "ICollection.hpp"
 
 /// @brief Provides basic text buffer manipulation functions.
-class TextBufferBase : public virtual IData<char>
+class TextBufferBase : public virtual ICollection<char>
 {
 
 public:
-
-    using IData::operator[];
 
     /// @brief Creates empty text buffer.
     TextBufferBase() : m_length(0) { };
@@ -36,6 +35,22 @@ public:
 
     /// @brief This type is not moveable.
     TextBufferBase(TextBufferBase&&) = delete;
+
+    /// @brief Implements indexing.
+    /// @param index Zero based index.
+    /// @return Character reference.
+    char* operator[](size_t index)
+    {
+        return &(data()[index]);
+    }
+
+    /// @brief Implements indexing as const reference.
+    /// @param index Zero based index.
+    /// @return Characted reference.
+    const char* operator[](size_t index) const
+    {
+        return &(data()[index]);
+    }
 
     /// @brief Copy assignment operator.
     /// @param other The text buffer to be copied.
@@ -207,23 +222,24 @@ protected:
 /// @brief Statically allocated text buffer.
 /// @tparam TSize Fixed size in bytes.
 template<size_t TSize>
-class TextBuffer : public StaticData<TSize, char>, public TextBufferBase
+class TextBuffer : public TextBufferBase
 {
 
 protected:
-    using Data = StaticData<TSize, char>;
+
     using Base = TextBufferBase;
 
 public:
-    using Data::operator[];
+//    using Data::operator[];
+
 
     /// @brief Creates an empty buffer.
-    TextBuffer() : Data(), Base() { }
+    TextBuffer() : Base(), m_data() { }
 
     /// @brief Creates a text buffer with formatted text.
     /// @param format Format string.
     /// @param ... Variadic arguments.
-    TextBuffer(const char* format, ...) : Data(), Base()
+    TextBuffer(const char* format, ...) : Base(), m_data()
     {
         va_list args;
         va_start(args, format);
@@ -233,9 +249,30 @@ public:
 
     /// @brief Copies a buffer from other instance.
     /// @param other The instance to copy the data from.
-    TextBuffer(const TextBuffer& other) : Data(other) { m_length = other.m_length; }
+    TextBuffer(const TextBuffer& other) : m_data()
+    {
+        m_length = other.m_length;
+        memcpy(&m_data, &(other.m_data), m_length);
+    }
 
     /// @brief This data type is not moveable, since it's stack allocated.
     TextBuffer(TextBuffer&&) = delete;
+
+    size_t size() const override
+    {
+        return TSize;
+    }
+
+    char* data() override
+    {
+        return &(m_data[0]);
+    }
+
+    const char* data() const override
+    {
+        return &(m_data[0]);
+    }
+
+    std::array<char, TSize> m_data;
 
 };

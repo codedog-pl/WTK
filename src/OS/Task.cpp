@@ -5,10 +5,11 @@
  * @brief       Scheduled task class. Implementation.
  * @remark      A part of the Woof Toolkit (WTK), RTOS API.
  *
- * @copyright   (c)2024 CodeDog, All rights reserved.
+ * @copyright   (c)2025 CodeDog, All rights reserved.
  */
 
 #include "Task.hpp"
+#include "AppThread.hpp"
 
 void OS::Task::process(ThreadContext context, size_t* immediateCount, size_t* delayedCount)
 {
@@ -24,6 +25,7 @@ void OS::Task::process(ThreadContext context, size_t* immediateCount, size_t* de
         m_tcb.delayTicks = m_tcb.resetTicks;
         if (immediateCount && *immediateCount) --*immediateCount; // The task stops being immediate...
         if (delayedCount) ++*delayedCount; // ...and becomes delayed.
+        AppThread::resetDelayTick(); // ublocks the delay thread.
     }
     else
     {

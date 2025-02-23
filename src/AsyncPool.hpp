@@ -5,7 +5,7 @@
  * @brief       Provides pre-allocated asynchronous results pool. Header only.
  * @remark      A part of the Woof Toolkit (WTK).
  *
- * @copyright   (c)2024 CodeDog, All rights reserved.
+ * @copyright   (c)2025 CodeDog, All rights reserved.
  */
 
 #pragma once
@@ -61,7 +61,7 @@ public:
 };
 
 /// @brief Provides pre-allocated asynchronous results pool.
-class AsyncPool final : public Pool<WTK_ASYNC_RESULTS, AsyncResultGeneric>
+class AsyncPool final : public Pool<AsyncResultGeneric, WTK_ASYNC_RESULTS>
 {
 
 public:
@@ -73,19 +73,19 @@ public:
         return instance;
     }
 
-    /// @param item Item pointer.
+    /// @param item Item reference.
     /// @returns True if the item is available. False otherwise.
-    bool isAvailable(AsyncResultGeneric* e) const override
+    bool isAvailable(AsyncResultGeneric& e) const override
     {
-        return e->isAvailable();
+        return e.isAvailable();
     }
 
     /// @brief Sets the item as available.
-    /// @param item Item pointer.
+    /// @param item Item reference.
     /// @param value 1: Available (default), 0: Taken.
-    void setAvailable(AsyncResultGeneric* e, bool value = 1) override
+    void setAvailable(AsyncResultGeneric& e, bool value = 1) override
     {
-        e->setAvailable(value);
+        e.setAvailable(value);
     }
 
 };
