@@ -5,7 +5,7 @@
  * @brief       System debug information logger. Header file.
  * @remark      A part of the Woof Toolkit (WTK).
  *
- * @copyright   (c)2025 CodeDog, All rights reserved.
+ * @copyright   (c)2024 CodeDog, All rights reserved.
  */
 
 #pragma once
@@ -23,6 +23,50 @@ class Log final
     STATIC(Log)
 
 public:
+
+#ifdef RELEASE
+
+    // RELEASE build: logging is fully disabled and takes no RAM. All bodies are empty (or return a fixed value)
+    // and defined here (rather than in Log.cpp) so the compiler sees them at every call site and optimizes calls
+    // away entirely at -O3. No message pool or output instance is ever created.
+
+    /// @brief Disabled in RELEASE builds. Does nothing.
+    static inline void init(bool = false) { }
+
+    /// @brief Disabled in RELEASE builds. Does nothing.
+    static inline void initUART(UART_HandleTypeDef*) { }
+
+    /// @brief Disabled in RELEASE builds. Does nothing.
+    static inline void startAsync(void) { }
+
+    /// @returns Always the strictest level in RELEASE builds, logging is disabled.
+    static inline LogMessage::Severity level() { return LogMessage::error; }
+
+    /// @brief Disabled in RELEASE builds. Does nothing.
+    static inline void level(LogMessage::Severity) { }
+
+    /// @brief Disabled in RELEASE builds. Does nothing.
+    static inline void printf(const char*, ...) { }
+
+    /// @brief Disabled in RELEASE builds. Does nothing.
+    static inline void tsprintf(const char*, ...) { }
+
+    /// @brief Disabled in RELEASE builds. Does nothing.
+    static inline void dump(const char*, ...) { }
+
+    /// @brief Disabled in RELEASE builds. Does nothing.
+    static inline void msg(const char*, ...) { }
+
+    /// @brief Disabled in RELEASE builds. Does nothing.
+    static inline void msg(LogMessage::Severity, const char*, ...) { }
+
+    /// @returns Always the default indentation in RELEASE builds, dumps are disabled.
+    static inline size_t dumpIndentation() { return dumpIndentationDefault; }
+
+    /// @brief Disabled in RELEASE builds. Does nothing.
+    static inline void dumpIndentation(size_t) { }
+
+#else
 
     /// @brief Initializes the default log level.
     /// @param isRelase 1: RELEASE build, fewer messages. 0: DEBUG build, more messages.
@@ -76,13 +120,19 @@ public:
     /// @param value The number of text columns to indent the dump lines.
     static inline void dumpIndentation(size_t value) { m_dumpIndentation = value; }
 
+#endif
+
 protected:
 
     static constexpr size_t dumpIndentationDefault = 24; // Default text indentation for the `dump` method.
+
+#ifndef RELEASE
 
     static inline LogMessage::Severity m_level = LogMessage::detail;    // Default log level. Messages above this level will be discarded.
     static inline LogMessagePool<WTK_LOG_Q> m_pool = {};                // Static message pool.
     static inline ILogOutput* m_output = {};                            // Message output implementation.
     static inline size_t m_dumpIndentation = dumpIndentationDefault;    // Current dump line indentation.
+
+#endif
 
 };

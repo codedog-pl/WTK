@@ -5,7 +5,7 @@
  * @brief       Provides an array data storage for a derived class, that is both indexable and iterable.
  * @remark      A part of the Woof Toolkit (WTK).
  *
- * @copyright   (c)2025 CodeDog, All rights reserved.
+ * @copyright   (c)2024 CodeDog, All rights reserved.
  */
 
 #pragma once

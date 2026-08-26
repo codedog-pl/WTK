@@ -9,7 +9,13 @@
  *              Introduces DateTypeDef, TimeTypeDef, DateTimeTypeDef types.
  *              Supports RTC_DateTypeDef and RTC_TimeTypeDef time types and provides conversions between them.
  *
- * @copyright   (c)2024 CodeDog, All rights reserved.
+ * @copyright   (c)2025 CodeDog, All rights reserved.
+ *
+ *                / \__
+ *               (    @\___
+ *               /         O
+ *              /   (_____/
+ *              /_____/   U
  */
 
 #include "datetime.h"

@@ -5,7 +5,7 @@
  * @brief       A universal, simple date / time storage class. Header only.
  * @remark      A part of the Woof Toolkit (WTK).
  *
- * @copyright	(c)2025 CodeDog, All rights reserved.
+ * @copyright	(c)2024 CodeDog, All rights reserved.
  */
 
 #pragma once
@@ -39,7 +39,7 @@ struct DateTime
     double fraction;    // Additional fraction of the second value (x >= 0 && x < 1).
 
     /// @brief Creates an empty DateTime instance.
-    DateTime() : year(0), month(1), day(1), hour(0), minute(0), second(0), fraction(0) { }
+    constexpr DateTime() : year(0), month(1), day(1), hour(0), minute(0), second(0), fraction(0) { }
 
     /// @brief Constructs a `DateTime` instance from a `time_t` value.
     /// @param cTime C time.
@@ -68,7 +68,7 @@ struct DateTime
     /// @param _minute Minute number, 0..59.
     /// @param _second Second number, 0..59.
     /// @param _fraction Fraction of second floating point value, 0..1, less than 1.
-    DateTime(
+    constexpr DateTime(
         int16_t _year, uint8_t _month, uint8_t _day,
         uint8_t _hour = 0, uint8_t _minute = 0, uint8_t _second = 0, double _fraction = 0)
         : year(_year), month(_month), day(_day),

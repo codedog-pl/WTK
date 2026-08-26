@@ -5,14 +5,14 @@
  * @brief       A set of macros and templates for using `enum` types as bit flags.
  * @remark      A part of the Woof Toolkit (WTK).
  *
- * @copyright	(c)2025 CodeDog, All rights reserved.
+ * @copyright	(c)2024 CodeDog, All rights reserved.
  */
 
 #pragma once
 
 #include <type_traits>
 
-/// @brief Counter base for generating subsequent bit flags.
+/// @brief Defines the counter base for generating subsequent bit flags.
 /// @param base A unique indentifier related to the enumeration.
 #define BIT_FLAG_BASE(base) enum { base = __COUNTER__ + 1U };
 
@@ -33,7 +33,7 @@
 /// @brief Negates all bits of the enumeration value.
 /// @param a Operand.
 /// @returns Bitwise operation result.
-BIT_FLAGS_TEMPLATE constexpr TEnum operator~(const TEnum a)
+BIT_FLAGS_TEMPLATE TEnum operator~(const TEnum a)
 {
     using TValue = typename std::underlying_type<TEnum>::type;
     return static_cast<TEnum>(~static_cast<TValue>(a));
@@ -43,7 +43,7 @@ BIT_FLAGS_TEMPLATE constexpr TEnum operator~(const TEnum a)
 /// @param a First operand.
 /// @param b Second operand.
 /// @returns Bitwise operation result.
-BIT_FLAGS_TEMPLATE constexpr TEnum operator&(const TEnum a, const TEnum b)
+BIT_FLAGS_TEMPLATE TEnum operator&(const TEnum a, const TEnum b)
 {
     using TValue = typename std::underlying_type<TEnum>::type;
     return static_cast<TEnum>(static_cast<TValue>(a) & static_cast<TValue>(b));
@@ -53,7 +53,7 @@ BIT_FLAGS_TEMPLATE constexpr TEnum operator&(const TEnum a, const TEnum b)
 /// @param a First operand.
 /// @param b Second operand.
 /// @returns Bitwise operation result.
-BIT_FLAGS_TEMPLATE constexpr TEnum operator|(const TEnum a, const TEnum b)
+BIT_FLAGS_TEMPLATE TEnum operator|(const TEnum a, const TEnum b)
 {
     using TValue = typename std::underlying_type<TEnum>::type;
     return static_cast<TEnum>(static_cast<TValue>(a) | static_cast<TValue>(b));
@@ -63,7 +63,7 @@ BIT_FLAGS_TEMPLATE constexpr TEnum operator|(const TEnum a, const TEnum b)
 /// @param a First operand.
 /// @param b Second operand.
 /// @returns Bitwise operation result.
-BIT_FLAGS_TEMPLATE constexpr TEnum operator^(const TEnum a, const TEnum b)
+BIT_FLAGS_TEMPLATE TEnum operator^(const TEnum a, const TEnum b)
 {
     using TValue = typename std::underlying_type<TEnum>::type;
     return static_cast<TEnum>(static_cast<TValue>(a) ^ static_cast<TValue>(b));
@@ -73,7 +73,7 @@ BIT_FLAGS_TEMPLATE constexpr TEnum operator^(const TEnum a, const TEnum b)
 /// @param a First operand reference.
 /// @param b Second operand.
 /// @returns First operand reference.
-BIT_FLAGS_TEMPLATE constexpr TEnum& operator&=(TEnum& a, const TEnum b)
+BIT_FLAGS_TEMPLATE TEnum& operator&=(TEnum& a, const TEnum b)
 {
     using TValue = typename std::underlying_type<TEnum>::type;
     return a = static_cast<TEnum>(static_cast<TValue>(a) & static_cast<TValue>(b));
@@ -83,7 +83,7 @@ BIT_FLAGS_TEMPLATE constexpr TEnum& operator&=(TEnum& a, const TEnum b)
 /// @param a First operand reference.
 /// @param b Second operand.
 /// @returns First operand reference.
-BIT_FLAGS_TEMPLATE constexpr TEnum& operator|=(TEnum& a, const TEnum b)
+BIT_FLAGS_TEMPLATE TEnum& operator|=(TEnum& a, const TEnum b)
 {
     using TValue = typename std::underlying_type<TEnum>::type;
     return a = static_cast<TEnum>(static_cast<TValue>(a) | static_cast<TValue>(b));
@@ -93,7 +93,7 @@ BIT_FLAGS_TEMPLATE constexpr TEnum& operator|=(TEnum& a, const TEnum b)
 /// @param a First operand reference.
 /// @param b Second operand.
 /// @returns First operand reference.
-BIT_FLAGS_TEMPLATE constexpr TEnum& operator^=(TEnum& a, const TEnum b)
+BIT_FLAGS_TEMPLATE TEnum& operator^=(TEnum& a, const TEnum b)
 {
     using TValue = typename std::underlying_type<TEnum>::type;
     return a = static_cast<TEnum>(static_cast<TValue>(a) ^ static_cast<TValue>(b));

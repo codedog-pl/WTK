@@ -6,6 +6,12 @@
  * @remark      A part of the Woof Toolkit (WTK).
  *
  * @copyright   (c)2025 CodeDog, All rights reserved.
+ *
+ *                / \__
+ *               (    @\___
+ *               /         O
+ *              /   (_____/
+ *              /_____/   U
  */
 
 #pragma once
@@ -31,7 +37,7 @@ public:
 public:
 
     /// @brief Creates a tone.
-    /// @param level Sound volume level in dB where 0 is full volume. Default 0.
+    /// @param level Sound volume level in dB where 0 is full volume. Default 0. Negative numbers only!
     /// @param waveform Waveform type. Default `Sine`.
     Tone(double level = 0, Waveform waveform = Sine) : m_waveform(waveform), m_level(level), m_samples()
     {

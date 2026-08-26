@@ -5,6 +5,12 @@
  * @brief       Crashes the application for debugging on unrecoverable error.
  *
  * @copyright   (c)2025 CodeDog, All rights reserved.
+ *
+ *                / \__
+ *               (    @\___
+ *               /         O
+ *              /   (_____/
+ *              /_____/   U
  */
 
 #pragma once

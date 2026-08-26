@@ -8,6 +8,12 @@
  * @remarks     Use if required buffer size is known at compile time / for stack allocations.
  *
  * @copyright   (c)2025 CodeDog, All rights reserved.
+ *
+ *                / \__
+ *               (    @\___
+ *               /         O
+ *              /   (_____/
+ *              /_____/   U
  */
 
 #pragma once

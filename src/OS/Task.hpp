@@ -5,12 +5,12 @@
  * @brief       Scheduled task class. Header file.
  * @remark      A part of the Woof Toolkit (WTK), RTOS API.
  *
- * @copyright   (c)2025 CodeDog, All rights reserved.
+ * @copyright   (c)2024 CodeDog, All rights reserved.
  */
 
 #pragma once
 
-#include "Mutex.hpp"
+#include "CriticalSection.hpp"
 #include "TaskControlBlock.hpp"
 
 namespace OS
@@ -23,37 +23,33 @@ class Task final
 public:
 
     /// @brief Creates an empty task.
-    Task() : m_mutex(), m_tcb() { }
+    Task() : m_tcb() { }
 
-    /// @brief Tests if the task is not empty. Thread safe.
+    /// @brief Tests if the task is not empty. Thread and ISR safe.
     inline operator bool()
     {
-        bool empty;
-        m_mutex.acquire();
-        empty = !m_tcb.id;
-        m_mutex.release();
-        return !empty;
+        CriticalSection::Scope cs;
+        return m_tcb.id != 0;
     }
 
 friend class TaskScheduler;
 private:
 
-    /// @brief Locks the task access to the calling thread.
-    /// @returns True if the mutex was acquired successfully.
-    inline bool lock() { return m_mutex.acquire(); }
+    /// @brief Locks the task access to the calling thread or ISR.
+    ///        Must be paired with a matching `unlock` call before this task is locked again.
+    /// @returns Always true (kept for interface compatibility).
+    inline bool lock() { m_primask = CriticalSection::enter(); return true; }
 
-    /// @brief Unlocks the task access.
-    /// @returns True if the mutex was released successfully.
-    inline bool unlock() { return m_mutex.release(); }
+    /// @brief Unlocks the task access previously locked by `lock`.
+    /// @returns Always true (kept for interface compatibility).
+    inline bool unlock() { CriticalSection::exit(m_primask); return true; }
 
-    /// @brief Acquires the task assigning an identifier if it's empty. Thread safe.
+    /// @brief Acquires the task assigning an identifier if it's empty. Thread and ISR safe.
     /// @returns True if a new empty task was acquired. False otherwise.
     inline bool acquire()
     {
-        m_mutex.acquire();
-        bool empty = acquireUnsafe();
-        m_mutex.release();
-        return empty;
+        CriticalSection::Scope cs;
+        return acquireUnsafe();
     }
 
     /// @brief Acquires the task assigning an identifier if it's empty. NOT THREAD SAFE.
@@ -74,10 +70,8 @@ private:
     /// @returns Task identifier.
     inline TaskId schedule(void* arg, OptionalBindingAction action, ThreadContext context = application, TickCount time = 0, TickCount reset = 0)
     {
-        m_mutex.acquire();
-        TaskId id = scheduleUnsafe(arg, action, context, time, reset);
-        m_mutex.release();
-        return id;
+        CriticalSection::Scope cs;
+        return scheduleUnsafe(arg, action, context, time, reset);
     }
 
     /// @brief Binds an action to the task. NOT THREAD SAFE!
@@ -116,8 +110,8 @@ private:
     /// @returns True if the task was canceled. False otherwise.
     bool cancel(TaskId& id, size_t* immediateCount = nullptr, size_t* delayedCount = nullptr);
 
-    Mutex m_mutex;                  // Action mutex.
     TaskControlBlock m_tcb;         // Task control block.
+    uint32_t m_primask = 0;         // PRIMASK state saved by `lock`, consumed by the matching `unlock`. NOT reentrant.
 
     static inline TaskId m_uid = 0; // Unique identifier counter.
 

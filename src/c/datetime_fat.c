@@ -5,7 +5,13 @@
  * @brief       FATFS date / time tools. Implementation.
  * @remark      A part of the Woof Toolkit (WTK).
  *
- * @copyright   (c)2024 CodeDog, All rights reserved.
+ * @copyright   (c)2025 CodeDog, All rights reserved.
+ *
+ *                / \__
+ *               (    @\___
+ *               /         O
+ *              /   (_____/
+ *              /_____/   U
  */
 
 #include "datetime_fat.h"

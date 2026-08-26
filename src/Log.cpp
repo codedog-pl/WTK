@@ -5,10 +5,13 @@
  * @brief       System debug information logger. Implementation.
  * @remark      A part of the Woof Toolkit (WTK).
  *
- * @copyright   (c)2025 CodeDog, All rights reserved.
+ * @copyright   (c)2024 CodeDog, All rights reserved.
  */
 
 #include "Log.hpp"
+
+#ifndef RELEASE // Defined in Log.hpp as empty inline stubs when RELEASE is set, must not be redefined here.
+
 #include "LogITM.hpp"
 #include "LogUART.hpp"
 
@@ -104,3 +107,5 @@ void Log::msg(LogMessage::Severity severity, const char *format, ...)
     m_pool.queue(message);
     if (m_output) m_output->send();
 }
+
+#endif

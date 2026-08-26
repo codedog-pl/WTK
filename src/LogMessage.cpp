@@ -5,7 +5,7 @@
  * @brief       Log message class. Implementation.
  * @remark      A part of the Woof Toolkit (WTK).
  *
- * @copyright   (c)2025 CodeDog, All rights reserved.
+ * @copyright   (c)2024 CodeDog, All rights reserved.
  */
 
 #include "LogMessage.hpp"
@@ -33,20 +33,30 @@ void LogMessage::clear()
 
 LogMessage *LogMessage::printf(const char *format, ...)
 {
+    size_t available = m_offset < size ? size - m_offset : 0;
     va_list args;
     va_start(args, format);
-    int l = vsnprintf((char*)(&m_buffer[m_offset]), size - m_length, format, args);
+    int l = vsnprintf((char*)(&m_buffer[m_offset]), available, format, args);
     va_end(args);
-    m_offset += l;
-    m_length += l;
+    if (l > 0) // `vsnprintf` returns the length that would have been written, it can exceed `available` on truncation.
+    {
+        if ((size_t)l > available) l = (int)available;
+        m_offset += l;
+        m_length += l;
+    }
     return this;
 }
 
 LogMessage *LogMessage::vprintf(const char *format, va_list args)
 {
-    int l = vsnprintf((char*)(&m_buffer[m_offset]), size - m_length, format, args);
-    m_offset += l;
-    m_length += l;
+    size_t available = m_offset < size ? size - m_offset : 0;
+    int l = vsnprintf((char*)(&m_buffer[m_offset]), available, format, args);
+    if (l > 0) // `vsnprintf` returns the length that would have been written, it can exceed `available` on truncation.
+    {
+        if ((size_t)l > available) l = (int)available;
+        m_offset += l;
+        m_length += l;
+    }
     return this;
 }
 

@@ -6,6 +6,12 @@
  * @remark      A part of the Woof Toolkit (WTK), RTOS API.
  *
  * @copyright   (c)2025 CodeDog, All rights reserved.
+ *
+ *                / \__
+ *               (    @\___
+ *               /         O
+ *              /   (_____/
+ *              /_____/   U
  */
 
 #include "Thread.hpp"

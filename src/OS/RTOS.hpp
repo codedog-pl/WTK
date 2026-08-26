@@ -5,7 +5,13 @@
  * @brief       Target RTOS bindings. Header file.
  * @remark      A part of the Woof Toolkit (WTK), RTOS API.
  *
- * @copyright   (c)2025 CodeDog, All rights reserved.
+ * @copyright   (c)2026 CodeDog, All rights reserved.
+ *
+ *                / \__
+ *               (    @\___
+ *               /         O
+ *              /   (_____/
+ *              /_____/   U
  */
 
 #pragma once
@@ -17,9 +23,12 @@
 #include <cstdint>
 #include "app_threadx.h"
 #include "tx_api.h"
+#include "tx_user.h"
 
 namespace OS
 {
+
+
 
 using EventFlags = unsigned long;       // An integer containing event flags of the `EventGroup`.
 using TickCount = unsigned int;         // An integer containing a number of RTOS ticks to wait.
@@ -28,11 +37,15 @@ using ThreadEntry = void(*)(ThreadArg); // Thread entry function pointer type.
 using ThreadHandle = TX_THREAD*;        // A pointer used to identify a RTOS thread.
 using NativePriority = unsigned int;    // An integer containing numerical value of a thread priority.
 
+/// @brief Contains the number of OS ticks per second read from the project configuration.
+static constexpr double ticksPerSecond = TX_TIMER_TICKS_PER_SECOND;
+
 }
 
 #elif defined(USE_FREE_RTOS)
 
 #include "FreeRTOS.h"
+#include "FreeRTOSConfig.h"
 #include "event_groups.h"
 #include "semphr.h"
 
@@ -45,6 +58,9 @@ using ThreadArg = void*;                // Thread entry function argument type.
 using ThreadEntry = void(*)(ThreadArg); // Thread entry function pointer type.
 using ThreadHandle = TaskHandle_t;      // A pointer used to identify a RTOS thread.
 using NativePriority = uint32_t;        // An integer containing numerical value of a thread priority.
+
+/// @brief Contains the number of OS ticks per second read from the project configuration.
+static constexpr double ticksPerSecond = configTICK_RATE_Hz;
 
 }
 
@@ -90,6 +106,17 @@ void delay(TickCount ticks);
 /// @brief Gets the number of system ticks since the current thread was started.
 /// @returns The number of system ticks since the current thread was started.
 TickCount getTick(void);
+
+/// @brief Configured system tick period in seconds.
+static constexpr double tickPeriod = 1.0 / static_cast<double>(
+#if defined(USE_AZURE_RTOS)
+    TX_TIMER_TICKS_PER_SECOND
+#elif defined(USE_FREE_RTOS)
+    configTICK_RATE_HZ
+#else
+    1000
+#endif
+);
 
 }
 

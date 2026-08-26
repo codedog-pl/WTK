@@ -5,9 +5,16 @@
  * @brief       A collection of a fixed amount of history elements
  *              that can be added, removed and iterated from the most recent one.
  *              Setting the page size allows the standard iterator to iterate over a subset of elements.
+ *
  * @remark      A part of the Woof Toolkit (WTK).
  *
  * @copyright   (c)2025 CodeDog, All rights reserved.
+ *
+ *                / \__
+ *               (    @\___
+ *               /         O
+ *              /   (_____/
+ *              /_____/   U
  */
 
 #pragma once
@@ -138,7 +145,10 @@ public: // HistoryList API:
     }
 
     /// @returns The last added element's reference or the first (empty) element's reference.
-    TElement& current() const { return m_length ? m_elements[m_offset] : m_elements[0]; }
+    TElement& current() { return m_length ? m_elements[m_offset] : m_elements[0]; }
+
+    /// @returns The last added element's reference or the first (empty) element's reference.
+    const TElement& current() const { return m_length ? m_elements[m_offset] : m_elements[0]; }
 
 protected: // Internal API (for storage implementation):
 

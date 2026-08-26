@@ -6,6 +6,12 @@
  * @remark      A part of the Woof Toolkit (WTK), RTOS API.
  *
  * @copyright   (c)2025 CodeDog, All rights reserved.
+ *
+ *                / \__
+ *               (    @\___
+ *               /         O
+ *              /   (_____/
+ *              /_____/   U
  */
 
 #pragma once
@@ -53,7 +59,7 @@ public:
 
     /// @brief Register a function that will be called when the application thread check fails.
     /// @param action Action to call when the application thread check fails.
-    static inline void registerInvalidTheadHandler(Action action) { m_invalidThread = action; }
+    static inline void registerInvalidThreadHandler(Action action) { m_invalidThread = action; }
 
     /// @brief If this function is called not from the app thread invalid thread handler is called
     //         or the application just crashes here.
@@ -83,6 +89,7 @@ public:
     static inline void sync(Action action, ThreadContext context = application)
     {
         m_scheduler.schedule(nullptr, action, context, 0, 0);
+
     }
 
     /// @brief Schedules the action to be executed in the selected thread context.

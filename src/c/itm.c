@@ -7,7 +7,13 @@
  *
  * @remarks     Reuqires SWV debugging enabled in trace mode.
  *
- * @copyright   (c)2024 CodeDog, All rights reserved.
+ * @copyright   (c)2025 CodeDog, All rights reserved.
+ *
+ *                / \__
+ *               (    @\___
+ *               /         O
+ *              /   (_____/
+ *              /_____/   U
  */
 
 #include "hal.h"
