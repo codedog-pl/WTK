@@ -1,0 +1,73 @@
+{
+    "env": {
+        "arm-gnu-toolchain": "d:/arm/arm-gnu-toolchain-13.3.rel1-mingw-w64-i686-arm-none-eabi",
+        "arm-gnu-toolchain-v": "13.3.1",
+        "arm-gnu-toolchain-t": "arm-none-eabi",
+        "arm-gnu-toolchain-f": "v7e-m+dp/hard"
+    },
+    "configurations": [
+        {
+            "name": "STM32H757",
+            "includePath": [
+                "${arm-gnu-toolchain}/${arm-gnu-toolchain-t}/include",
+                "${arm-gnu-toolchain}/lib/gcc/${arm-gnu-toolchain-t}/${arm-gnu-toolchain-v}/include",
+                "${arm-gnu-toolchain}/lib/gcc/${arm-gnu-toolchain-t}/${arm-gnu-toolchain-v}/include-fixed",
+                "${arm-gnu-toolchain}/${arm-gnu-toolchain-t}/include/c++/${arm-gnu-toolchain-v}",
+                "${arm-gnu-toolchain}/${arm-gnu-toolchain-t}/include/c++/${arm-gnu-toolchain-v}/${arm-gnu-toolchain-t}",
+                "${arm-gnu-toolchain}/${arm-gnu-toolchain-t}/include/c++/${arm-gnu-toolchain-v}/${arm-gnu-toolchain-t}/thumb/${arm-gnu-toolchain-f}",
+                "${workspaceFolder}/src",
+                "${workspaceFolder}/src/c",
+                "${workspaceFolder}/src/FS",
+                "${workspaceFolder}/src/OS",
+                "${workspaceFolder}/env/",
+                "${workspaceFolder}/env/Core/Inc",
+                "${workspaceFolder}/env/AZURE_RTOS/App",
+                "${workspaceFolder}/env/FileX/App",
+                "${workspaceFolder}/env/FileX/Target",
+                "${workspaceFolder}/env/USBX/App",
+                "${workspaceFolder}/env/USBX/Target",
+                "${workspaceFolder}/env/Drivers/CMSIS/Include",
+                "${workspaceFolder}/env/Drivers/CMSIS/Device/ST/STM32H7xx/Include",
+                "${workspaceFolder}/env/Drivers/STM32H7xx_HAL_Driver/Inc",
+                "${workspaceFolder}/env/Drivers/STM32H7xx_HAL_Driver/Inc/Legacy",
+                "${workspaceFolder}/env/Middlewares/ST/threadx/common/inc",
+                "${workspaceFolder}/env/Middlewares/ST/threadx/ports/cortex_m7/gnu/inc",
+                "${workspaceFolder}/env/Middlewares/ST/filex/common/inc",
+                "${workspaceFolder}/env/Middlewares/ST/filex/ports/generic/inc",
+                "${workspaceFolder}/env/Middlewares/ST/usbx/common/core/inc",
+                "${workspaceFolder}/env/Middlewares/ST/usbx/common/usbx_host_classes/inc",
+                "${workspaceFolder}/env/Middlewares/ST/usbx/common/usbx_stm32_host_controllers",
+                "${workspaceFolder}/env/Middlewares/ST/usbx/ports/generic/inc"
+            ],
+            "defines": [
+                "STM32H757xx",
+                "USE_HAL_DRIVER",
+                "CORE_CM7",
+                "TX_INCLUDE_USER_DEFINE_FILE",
+                "TX_SINGLE_MODE_NON_SECURE=1",
+                "FX_INCLUDE_USER_DEFINE_FILE",
+                "UX_INCLUDE_USER_DEFINE_FILE",
+                "__weak=__attribute__((weak))",
+                "__packed=__attribute__((__packed__))",
+                "__FPU_PRESENT=1U",
+                "DEVICE=1",
+                "DEBUG"
+            ],
+            "compilerPath": "d:/arm/gcc-arm-none-eabi-10.3-2021.10/bin/arm-none-eabi-g++.exe",
+            "compilerArgs": [
+                "-mcpu=cortex-m7",
+                "-mfpu=fpv5-d16",
+                "-mfloat-abi=hard",
+                "-mthumb"
+            ],
+            "cStandard": "c17",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "gcc-arm",
+            "browse": {
+                "limitSymbolsToIncludedHeaders": true
+            },
+            "mergeConfigurations": false
+        }
+    ],
+    "version": 4
+}
