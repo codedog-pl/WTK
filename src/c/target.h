@@ -5,7 +5,13 @@
  * @brief       Main target system configuration for the Woof Toolkit.
  * @remark      A part of the Woof Toolkit (WTK).
  *
- * @copyright   (c)2024 CodeDog, All rights reserved.
+ * @copyright   (c)2026 CodeDog, All rights reserved.
+ *
+ *                / \__
+ *               (    @\___
+ *               /         O
+ *              /   (_____/
+ *              /_____/   U
  */
 
 // THIS FILE SHOULD BE EDITED TO MATCH THE TARGET SYSTEM DRIVERS AND MIDDLEWARES

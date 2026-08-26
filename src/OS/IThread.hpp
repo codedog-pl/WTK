@@ -5,7 +5,7 @@
  * @brief       Declares an API for the common system thread properties and methods.
  * @remark      A part of the Woof Toolkit (WTK), RTOS API.
  *
- * @copyright   (c)2025 CodeDog, All rights reserved.
+ * @copyright   (c)2026 CodeDog, All rights reserved.
  *
  *                / \__
  *               (    @\___

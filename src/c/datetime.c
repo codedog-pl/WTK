@@ -1,15 +1,14 @@
 /**
- * @file        datetime.h
+ * @file        datetime.c
  * @author      Adam Łyskawa
  *
  * @brief       Date and time types and functions. Implementation.
  * @remark      A part of the Woof Toolkit (WTK).
  *
- * @remarks
- *              Introduces DateTypeDef, TimeTypeDef, DateTimeTypeDef types.
+ * @remarks     Introduces DateTypeDef, TimeTypeDef, DateTimeTypeDef types.
  *              Supports RTC_DateTypeDef and RTC_TimeTypeDef time types and provides conversions between them.
  *
- * @copyright   (c)2025 CodeDog, All rights reserved.
+ * @copyright   (c)2026 CodeDog, All rights reserved.
  *
  *                / \__
  *               (    @\___

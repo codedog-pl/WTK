@@ -5,7 +5,13 @@
  * @brief       File system adapter for the Azure RTOS FILEX backend. Header file.
  * @remark      A part of the Woof Toolkit (WTK), File System API.
  *
- * @copyright	(c)2025 CodeDog, All rights reserved.
+ * @copyright   (c)2026 CodeDog, All rights reserved.
+ *
+ *                / \__
+ *               (    @\___
+ *               /         O
+ *              /   (_____/
+ *              /_____/   U
  */
 
 #pragma once

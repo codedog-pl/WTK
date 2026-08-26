@@ -3,8 +3,9 @@
  * @author      Adam Łyskawa
  *
  * @brief       Crashes the application for debugging on unrecoverable error.
+ * @remark      A part of the Woof Toolkit (WTK).
  *
- * @copyright   (c)2025 CodeDog, All rights reserved.
+ * @copyright   (c)2026 CodeDog, All rights reserved.
  *
  *                / \__
  *               (    @\___

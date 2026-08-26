@@ -1,9 +1,17 @@
 /**
- * @file        fx_time.h
+ * @file        fx_time.c
  * @author      Adam Łyskawa
- * @brief       FILEX time synchronization.
  *
- * @copyright   (c)2024 CodeDog, All rights reserved.
+ * @brief       FILEX time synchronization.
+ * @remark      A part of the Woof Toolkit (WTK).
+ *
+ * @copyright   (c)2026 CodeDog, All rights reserved.
+ *
+ *                / \__
+ *               (    @\___
+ *               /         O
+ *              /   (_____/
+ *              /_____/   U
  */
 
 #include "fx_time.h"

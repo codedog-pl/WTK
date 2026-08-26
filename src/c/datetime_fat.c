@@ -1,11 +1,11 @@
 /**
- * @file        datetime.h
+ * @file        datetime_fat.c
  * @author      Adam Łyskawa
  *
  * @brief       FATFS date / time tools. Implementation.
  * @remark      A part of the Woof Toolkit (WTK).
  *
- * @copyright   (c)2025 CodeDog, All rights reserved.
+ * @copyright   (c)2026 CodeDog, All rights reserved.
  *
  *                / \__
  *               (    @\___

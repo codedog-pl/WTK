@@ -8,7 +8,13 @@
  * @remarks     Intended to use on embedded systems to avoid dynamic memory allocations.
  *              Pool sizes must be set at compile time.
  *
- * @copyright	(c)2025 CodeDog, All rights reserved.
+ * @copyright   (c)2026 CodeDog, All rights reserved.
+ *
+ *                / \__
+ *               (    @\___
+ *               /         O
+ *              /   (_____/
+ *              /_____/   U
  */
 
 #pragma once

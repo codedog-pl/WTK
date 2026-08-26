@@ -7,7 +7,7 @@
  *
  * @remarks     Requires `COUNTER_TIM` macro set to HAL `TIM` instance and `COUNTER_1S` set to number of `TIM` ticks per second.
  *
- * @copyright   (c)2025 CodeDog, All rights reserved.
+ * @copyright   (c)2026 CodeDog, All rights reserved.
  *
  *                / \__
  *               (    @\___

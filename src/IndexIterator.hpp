@@ -5,7 +5,7 @@
  * @brief       Simple bidirectional sequential iterator for indexable collections. Header only.
  * @remark      A part of the Woof Toolkit (WTK).
  *
- * @copyright   (c)2025 CodeDog, All rights reserved.
+ * @copyright   (c)2026 CodeDog, All rights reserved.
  *
  *                / \__
  *               (    @\___

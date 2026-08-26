@@ -5,10 +5,9 @@
  * @brief       A collection of a fixed amount of history elements
  *              that can be added, removed and iterated from the most recent one.
  *              Setting the page size allows the standard iterator to iterate over a subset of elements.
- *
  * @remark      A part of the Woof Toolkit (WTK).
  *
- * @copyright   (c)2025 CodeDog, All rights reserved.
+ * @copyright   (c)2026 CodeDog, All rights reserved.
  *
  *                / \__
  *               (    @\___
