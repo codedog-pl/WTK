@@ -12,7 +12,7 @@ logic clean, readable and as portable as possible.
 Also it allows the application to use the power of the modern
 C++ language without the expensive standard library parts.
 
-The toolkit is guarateed to NOT USE DYNAMIC MEMORY ALLOCATIONS.
+The toolkit is guaranteed to NOT USE DYNAMIC MEMORY ALLOCATIONS.
 
 All the strings used in the API are basic null terminated
 C strings.
@@ -25,11 +25,8 @@ The current version supports following middlewares and APIs:
 - STM32 HAL
 - Azure RTOS
   - FILEX
-  - USBX
 - FreeRTOS
   - FATFS
-  - USB_HOST
-- TouchGFX
 
 "On the other end" (the compatible one) it provides a common,
 target independent C++ API.
@@ -43,23 +40,35 @@ It is designed to be:
 
 ## APIs provided
 
-- File System (FS namespace) - tools to access various embedded filesystems, buildable `Path` type, a `File` object that can be used in RAII way.
+- File System (`FS` namespace) - tools to access various embedded filesystems, buildable `Path` type, a `File` object that can be used in RAII way.
 
-- RTOS (OS namespace) - tools to synchronize threads and schedule tasks (with ISR support) using either Azure RTOS or FreeRTOS backend.
+- RTOS (`OS` namespace) - tools to synchronize threads and schedule tasks (with ISR support) using either Azure RTOS or FreeRTOS backend.
+
+- Logging (`Log` class) - a pre-allocated, pool-based debug logging system with pluggable output backends (UART, ITM/SWV) and C bindings.
+
+- General purpose building blocks - allocation-free containers and iterators (`Array`, `Pool`, `DataSetT`, `HistoryList`...), async helpers, date/time types, PCM sample types and other utilities shared across the toolkit.
 
 An application that uses those APIs is target operation
 system agnostic.
 
+## Project structure
+
+- `src` - the toolkit source code (this is the only directory that needs to be added to your project).
+  - `src/OS` - the RTOS API (`OS` namespace).
+  - `src/FS` - the File System API (`FS` namespace).
+  - `src/c` - plain C headers and sources (bindings, HAL shims, target configuration).
+- `env` - a reference STM32H757 project environment (ST/third-party generated code) used to build and test the toolkit; it is not part of WTK and should not be modified.
+
 ## Usage
 
-Add entire `/Tools` directory to the project. Add all
+Add the entire `src` directory to the project. Add all
 `.c` and `.cpp` files to the build configuration, add
-`/Tools` and `/Tools/c` directiores as include directories.
+`src` and `src/c` as include directories.
 
 Be sure to set C++ language version to at least 17.
 
-Review and edit the `c/target.h` file according to the actual
-MCU target configuration.
+Review and edit the `src/c/target.h` file according to the
+actual MCU target configuration.
 
 ## Extending
 
@@ -105,7 +114,7 @@ used enumerations as bit flags.
 
 All functions that can fail should return either a `false`, `0`, `nullptr` or other kind of empty or invalid object in case they cannot return a valid result.
 
-In case of an unrecoverable error when the system stability cannot be guaranteed, the code should enter the inifinite loop to prevent damage to the software and hardware components. The infinite loop also makes finding the crash source easier when using a debugger.
+In case of an unrecoverable error when the system stability cannot be guaranteed, the code should enter the infinite loop to prevent damage to the software and hardware components. The infinite loop also makes finding the crash source easier when using a debugger.
 
 Use the dedicated `Crash::here()` function to handle an unrecoverable error.
 
@@ -141,4 +150,4 @@ Please report all issues found on GitHub.
 
 The toolkit is created by Adam Łyskawa for CodeDog Sp. z o.o.
 
-It's realeased as Open Source under MIT license.
+It's released as Open Source under MIT license.
