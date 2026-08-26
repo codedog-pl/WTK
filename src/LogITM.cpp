@@ -35,7 +35,7 @@ LogITM::LogITM(ILogMessagePool& pool) :
     send(); // In case if the pool already contains unsent messages.
 }
 
-LogITM *LogITM::getInstance(ILogMessagePool &pool)
+LogITM* LogITM::getInstance(ILogMessagePool& pool)
 {
     static LogITM instance(pool);
     return m_instance = &instance;

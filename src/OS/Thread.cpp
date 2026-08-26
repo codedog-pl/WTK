@@ -35,7 +35,7 @@ OS::Thread::~Thread()
     }
 }
 
-void OS::Thread::start(void *arg, ThreadEntry entry, const char *name, Priority priority)
+void OS::Thread::start(void* arg, ThreadEntry entry, const char* name, Priority priority)
 {
     if (m_handle) Crash::here(); // The thread is already started!
     auto result = tx_thread_create(
@@ -67,7 +67,7 @@ OS::Thread::~Thread()
     if (m_handle) terminate();
 }
 
-void OS::Thread::start(void *arg, ThreadEntry entry, const char *name, Priority priority)
+void OS::Thread::start(void* arg, ThreadEntry entry, const char* name, Priority priority)
 {
     if (m_handle) Crash::here(); // The thread is already started!
     m_handle = xTaskCreateStatic(entry, name, sizeof(m_stack) >> 2, arg, priority, m_stack, &m_buffer);

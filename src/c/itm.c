@@ -43,7 +43,7 @@ void ITM_Enable(void)
  * @param len Data length.
  * @return Data length.
  */
-int _write(int file, char *ptr, int len)
+int _write(int file, char* ptr, int len)
 {
     for (int i = 0; i < len; i++) ITM_SendChar(*ptr++);
     return len;

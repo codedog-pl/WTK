@@ -26,12 +26,12 @@ FS::Path::Path(va_list args, const char* path) : m_fileSystem(), m_absolutePath(
     initializeWithVariadicArgs(path, args);
 }
 
-FS::Path::Path(va_list args, const FileSystem *fs, const char *path) : m_fileSystem(), m_absolutePath(), m_relativePath()
+FS::Path::Path(va_list args, const FileSystem* fs, const char* path) : m_fileSystem(), m_absolutePath(), m_relativePath()
 {
     initializeWithVariadicArgs(fs, path, args);
 }
 
-FS::Path::Path(const char *path, ...) : m_fileSystem(), m_absolutePath(), m_relativePath()
+FS::Path::Path(const char* path, ...) : m_fileSystem(), m_absolutePath(), m_relativePath()
 {
     va_list args;
     va_start(args, path);
@@ -39,7 +39,7 @@ FS::Path::Path(const char *path, ...) : m_fileSystem(), m_absolutePath(), m_rela
     va_end(args);
 }
 
-FS::Path::Path(const FileSystem *fs, const char *path, ...) : m_fileSystem(), m_absolutePath(), m_relativePath()
+FS::Path::Path(const FileSystem* fs, const char* path, ...) : m_fileSystem(), m_absolutePath(), m_relativePath()
 {
     va_list args;
     va_start(args, path);
@@ -47,7 +47,7 @@ FS::Path::Path(const FileSystem *fs, const char *path, ...) : m_fileSystem(), m_
     va_end(args);
 }
 
-void FS::Path::initializeWithVariadicArgs(const char *path, va_list args)
+void FS::Path::initializeWithVariadicArgs(const char* path, va_list args)
 {
     m_fileSystem = FileSystemTable::find(path);
     if (!m_fileSystem || !m_fileSystem->root()) return;
@@ -58,7 +58,7 @@ void FS::Path::initializeWithVariadicArgs(const char *path, va_list args)
     va_end(argsCopy);
 }
 
-void FS::Path::initializeWithVariadicArgs(const FileSystem* fs, const char *path, va_list args)
+void FS::Path::initializeWithVariadicArgs(const FileSystem* fs, const char* path, va_list args)
 {
     if (!fs || !fs->root()) return;
     m_fileSystem = fs;

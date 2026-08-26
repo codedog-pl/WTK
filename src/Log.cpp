@@ -27,7 +27,7 @@ void Log::init(bool isRelase)
     m_output = LogITM::getInstance(m_pool);
 }
 
-void Log::initUART(UART_HandleTypeDef *huart)
+void Log::initUART(UART_HandleTypeDef* huart)
 {
     m_output = LogUART::getInstance(huart, m_pool);
 }
@@ -37,7 +37,7 @@ void Log::startAsync(void)
     if (m_output) m_output->startAsync();
 }
 
-void Log::printf(const char *format, ...)
+void Log::printf(const char* format, ...)
 {
     if (m_output && !m_output->isAvailable()) return;
     auto message = m_pool.grab(); if (!message) return;
@@ -49,7 +49,7 @@ void Log::printf(const char *format, ...)
     if (m_output) m_output->send();
 }
 
-void Log::tsprintf(const char *format, ...)
+void Log::tsprintf(const char* format, ...)
 {
     if (m_output && !m_output->isAvailable()) return;
     auto message = m_pool.grab(); if (!message) return;
@@ -61,7 +61,7 @@ void Log::tsprintf(const char *format, ...)
     if (m_output) m_output->send();
 }
 
-void Log::dump(const char *format, ...)
+void Log::dump(const char* format, ...)
 {
     if (m_output && !m_output->isAvailable()) return;
     if (m_level < LogMessage::detail) return;
@@ -75,7 +75,7 @@ void Log::dump(const char *format, ...)
     if (m_output) m_output->send();
 }
 
-void Log::msg(const char *format, ...)
+void Log::msg(const char* format, ...)
 {
     if (m_output && !m_output->isAvailable()) return;
     auto message = m_pool.grab(); if (!message) return;
@@ -87,7 +87,7 @@ void Log::msg(const char *format, ...)
     if (m_output) m_output->send();
 }
 
-void Log::msg(LogMessage::Severity severity, const char *format, ...)
+void Log::msg(LogMessage::Severity severity, const char* format, ...)
 {
     if (m_output && !m_output->isAvailable()) return;
     auto message = m_pool.grab(severity); if (!message) return;

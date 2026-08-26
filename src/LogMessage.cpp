@@ -24,7 +24,7 @@ LogMessage::LogMessage()
 LogMessage::LogMessage(Severity s)
     : m_severity(s), m_length(0), m_offset(0), m_buffer() { memset(m_buffer, 0, size); }
 
-LogMessage::LogMessage(const LogMessage &other)
+LogMessage::LogMessage(const LogMessage& other)
     : m_severity(other.m_severity), m_length(other.m_length), m_offset(other.m_offset), m_buffer()
 {
     memcpy(m_buffer, other.m_buffer, m_length);
@@ -37,7 +37,7 @@ void LogMessage::clear()
     memset(m_buffer, 0, size);
 }
 
-LogMessage *LogMessage::printf(const char *format, ...)
+LogMessage* LogMessage::printf(const char* format, ...)
 {
     size_t available = m_offset < size ? size - m_offset : 0;
     va_list args;
@@ -53,7 +53,7 @@ LogMessage *LogMessage::printf(const char *format, ...)
     return this;
 }
 
-LogMessage *LogMessage::vprintf(const char *format, va_list args)
+LogMessage* LogMessage::vprintf(const char* format, va_list args)
 {
     size_t available = m_offset < size ? size - m_offset : 0;
     int l = vsnprintf((char*)(&m_buffer[m_offset]), available, format, args);
@@ -66,7 +66,7 @@ LogMessage *LogMessage::vprintf(const char *format, va_list args)
     return this;
 }
 
-LogMessage *LogMessage::add(char c, int count)
+LogMessage* LogMessage::add(char c, int count)
 {
     if (m_length + count > size) return this;
     for (int i = 0; i < count; i++)
@@ -78,7 +78,7 @@ LogMessage *LogMessage::add(char c, int count)
     return this;
 }
 
-LogMessage *LogMessage::add(const char *s)
+LogMessage* LogMessage::add(const char* s)
 {
     size_t l = strlen(s);
     if (m_length + l > size) return this;
@@ -88,7 +88,7 @@ LogMessage *LogMessage::add(const char *s)
     return this;
 }
 
-LogMessage *LogMessage::addTimestamp()
+LogMessage* LogMessage::addTimestamp()
 {
     DateTimeEx timestamp;
     if (timestamp.getRTC())

@@ -23,7 +23,7 @@
 #include "datetime_fat.h"
 #include <cstring>
 
-FS::AdapterTypes::Status FS::AdapterFATFS::find(Media &media, const char *path, DirectoryEntry &entry) const
+FS::AdapterTypes::Status FS::AdapterFATFS::find(Media& media, const char* path, DirectoryEntry& entry) const
 {
     auto fs = FileSystemTable::find(&media);
     if (!fs) return FR_INVALID_DRIVE;
@@ -33,12 +33,12 @@ FS::AdapterTypes::Status FS::AdapterFATFS::find(Media &media, const char *path, 
     return f_findfirst(&entry.dir, &entry.info, context.absolutePath(), "*");
 }
 
-FS::AdapterTypes::Status FS::AdapterFATFS::created(Media &media, const char *path, DateTime &dateTime) const
+FS::AdapterTypes::Status FS::AdapterFATFS::created(Media& media, const char* path, DateTime& dateTime) const
 {
     return FR_NOT_ENABLED;
 }
 
-FS::AdapterTypes::Status FS::AdapterFATFS::modified(Media &media, const char *path, DateTime &dateTime) const
+FS::AdapterTypes::Status FS::AdapterFATFS::modified(Media& media, const char* path, DateTime& dateTime) const
 {
     FILINFO stat = {};
     Status result = fstat(media, path, stat);
@@ -47,7 +47,7 @@ FS::AdapterTypes::Status FS::AdapterFATFS::modified(Media &media, const char *pa
     return result;
 }
 
-FS::AdapterTypes::Status FS::AdapterFATFS::fileCreate(Media &media, const char *path) const
+FS::AdapterTypes::Status FS::AdapterFATFS::fileCreate(Media& media, const char* path) const
 {
     auto fs = FileSystemTable::find(&media);
     if (!fs) return FR_INVALID_DRIVE;
@@ -58,7 +58,7 @@ FS::AdapterTypes::Status FS::AdapterFATFS::fileCreate(Media &media, const char *
     return result;
 }
 
-FS::AdapterTypes::Status FS::AdapterFATFS::fileExists(Media &media, const char *path) const
+FS::AdapterTypes::Status FS::AdapterFATFS::fileExists(Media& media, const char* path) const
 {
     FILINFO info = {};
     Status result = fstat(media, path, info);
@@ -66,7 +66,7 @@ FS::AdapterTypes::Status FS::AdapterFATFS::fileExists(Media &media, const char *
     return (info.fattrib & AM_DIR) == 0 ? FR_OK : FR_EXIST;
 }
 
-FS::AdapterTypes::Status FS::AdapterFATFS::fileOpen(Media &media, FileControlBlock &file, const char *path, FileMode mode) const
+FS::AdapterTypes::Status FS::AdapterFATFS::fileOpen(Media& media, FileControlBlock& file, const char* path, FileMode mode) const
 {
     auto fs = FileSystemTable::find(&media);
     if (!fs) return FR_INVALID_DRIVE;
@@ -80,28 +80,28 @@ FS::AdapterTypes::Status FS::AdapterFILEX::fileAllocate(FileControlBlock& file, 
     return f_expand(&file, size, 0);
 }
 
-FS::AdapterTypes::Status FS::AdapterFATFS::fileSeek(FileControlBlock &file, FileOffset offset) const
+FS::AdapterTypes::Status FS::AdapterFATFS::fileSeek(FileControlBlock& file, FileOffset offset) const
 {
     return f_lseek(&file, offset);
 }
 
-FS::AdapterTypes::Status FS::AdapterFATFS::fileRead(FileControlBlock &file, void *buffer, size_t size, size_t &bytesRead) const
+FS::AdapterTypes::Status FS::AdapterFATFS::fileRead(FileControlBlock& file, void* buffer, size_t size, size_t& bytesRead) const
 {
     return f_read(&file, buffer, size, &bytesRead);
 }
 
-FS::AdapterTypes::Status FS::AdapterFATFS::fileWrite(FileControlBlock &file, const void *buffer, size_t size) const
+FS::AdapterTypes::Status FS::AdapterFATFS::fileWrite(FileControlBlock& file, const void* buffer, size_t size) const
 {
     size_t bytesWritten = 0;
     return f_write(&file, buffer, size, &bytesWritten);
 }
 
-FS::AdapterTypes::Status FS::AdapterFATFS::fileClose(FileControlBlock &file) const
+FS::AdapterTypes::Status FS::AdapterFATFS::fileClose(FileControlBlock& file) const
 {
     return f_close(&file);
 }
 
-FS::AdapterTypes::Status FS::AdapterFATFS::fileRename(Media &media, const char *oldName, const char *newName) const
+FS::AdapterTypes::Status FS::AdapterFATFS::fileRename(Media& media, const char* oldName, const char* newName) const
 {
     auto fs = FileSystemTable::find(&media);
     if (!fs) return FR_INVALID_DRIVE;
@@ -114,7 +114,7 @@ FS::AdapterTypes::Status FS::AdapterFATFS::fileRename(Media &media, const char *
     return f_rename(context1.absolutePath(), context2.absolutePath());
 }
 
-FS::AdapterTypes::Status FS::AdapterFATFS::fileDelete(Media &media, const char *path) const
+FS::AdapterTypes::Status FS::AdapterFATFS::fileDelete(Media& media, const char* path) const
 {
     auto fs = FileSystemTable::find(&media);
     if (!fs) return FR_INVALID_DRIVE;
@@ -126,7 +126,7 @@ FS::AdapterTypes::Status FS::AdapterFATFS::fileDelete(Media &media, const char *
     return f_unlink(context.absolutePath());
 }
 
-FS::AdapterTypes::Status FS::AdapterFATFS::directoryCreate(Media &media, const char *path) const
+FS::AdapterTypes::Status FS::AdapterFATFS::directoryCreate(Media& media, const char* path) const
 {
     auto fs = FileSystemTable::find(&media);
     if (!fs) return FR_INVALID_DRIVE;
@@ -134,7 +134,7 @@ FS::AdapterTypes::Status FS::AdapterFATFS::directoryCreate(Media &media, const c
     return f_mkdir(context.absolutePath());
 }
 
-FS::AdapterTypes::Status FS::AdapterFATFS::directoryExists(Media &media, const char *path) const
+FS::AdapterTypes::Status FS::AdapterFATFS::directoryExists(Media& media, const char* path) const
 {
     FILINFO stat = {};
     Status result = fstat(media, path, stat);
@@ -142,7 +142,7 @@ FS::AdapterTypes::Status FS::AdapterFATFS::directoryExists(Media &media, const c
     return (stat.fattrib & AM_DIR) != 0 ? FR_OK : FR_EXIST;
 }
 
-FS::AdapterTypes::Status FS::AdapterFATFS::directoryRename(Media &media, const char *oldName, const char *newName) const
+FS::AdapterTypes::Status FS::AdapterFATFS::directoryRename(Media& media, const char* oldName, const char* newName) const
 {
     auto fs = FileSystemTable::find(&media);
     if (!fs) return FR_INVALID_DRIVE;
@@ -155,7 +155,7 @@ FS::AdapterTypes::Status FS::AdapterFATFS::directoryRename(Media &media, const c
     return f_rename(context1.absolutePath(), context2.absolutePath());
 }
 
-FS::AdapterTypes::Status FS::AdapterFATFS::directoryDelete(Media &media, const char *path) const
+FS::AdapterTypes::Status FS::AdapterFATFS::directoryDelete(Media& media, const char* path) const
 {
     auto fs = FileSystemTable::find(&media);
     if (!fs) return FR_INVALID_DRIVE;
@@ -167,7 +167,7 @@ FS::AdapterTypes::Status FS::AdapterFATFS::directoryDelete(Media &media, const c
     return f_unlink(context.absolutePath());
 }
 
-FS::AdapterTypes::Status FS::AdapterFATFS::fstat(Media &media, const char *path, FILINFO &stat) const
+FS::AdapterTypes::Status FS::AdapterFATFS::fstat(Media& media, const char* path, FILINFO& stat) const
 {
     auto fs = FileSystemTable::find(&media);
     if (!fs) return FR_INVALID_DRIVE;
@@ -175,7 +175,7 @@ FS::AdapterTypes::Status FS::AdapterFATFS::fstat(Media &media, const char *path,
     return f_stat(context.absolutePath(), &stat);
 }
 
-void FS::AdapterFATFS::toDateTime(WORD date, WORD time, DateTime &dateTime)
+void FS::AdapterFATFS::toDateTime(WORD date, WORD time, DateTime& dateTime)
 {
     FAT2DateTime((date << 16) + time, reinterpret_cast<DateTimeTypeDef*>(&dateTime));
 }

@@ -36,19 +36,19 @@ void FS::MediaServices::registerType(MediaType mediaType, const char* root, Medi
     configuration->driver = driver;
 }
 
-const FS::MediaConfiguration *FS::MediaServices::getConfiguration(MediaType mediaType)
+const FS::MediaConfiguration* FS::MediaServices::getConfiguration(MediaType mediaType)
 {
     for (const auto& c : configurations) if (c.type == mediaType) return &c;
     return nullptr;
 }
 
-const FS::MediaConfiguration *FS::MediaServices::getConfiguration(const char *root)
+const FS::MediaConfiguration* FS::MediaServices::getConfiguration(const char* root)
 {
     for (const auto& c : configurations) if (strcmp(root, c.root) == 0) return &c;
     return nullptr;
 }
 
-bool FS::MediaServices::format(const char* root, MediaFormat format, const char *label)
+bool FS::MediaServices::format(const char* root, MediaFormat format, const char* label)
 {
 #if defined(USE_FATFS)
     BYTE opt = 0;
@@ -135,7 +135,7 @@ bool FS::MediaServices::format(const char* root, MediaFormat format, const char 
     return false; // Not implemented yet.
 }
 
-bool FS::MediaServices::mount(Media &media, const char *root)
+bool FS::MediaServices::mount(Media& media, const char* root)
 {
     auto entry = const_cast<FileSystem*>(FileSystemTable::find(root));
     if (!entry) // New entry.
@@ -159,7 +159,7 @@ bool FS::MediaServices::mount(Media &media, const char *root)
     return status;
 }
 
-bool FS::MediaServices::umount(const char *root)
+bool FS::MediaServices::umount(const char* root)
 {
     auto entry = const_cast<FileSystem*>(FileSystemTable::find(root));
     if (!entry) return false; // FS root not found.
@@ -168,7 +168,7 @@ bool FS::MediaServices::umount(const char *root)
     return true;
 }
 
-bool FS::MediaServices::umount(Media &media)
+bool FS::MediaServices::umount(Media& media)
 {
     auto entry = const_cast<FileSystem*>(FileSystemTable::find(&media));
     if (!entry) return false; // Media not found.

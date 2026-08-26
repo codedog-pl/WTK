@@ -24,7 +24,7 @@ PCM16S& PCM16S::operator=(int16_t value)
     return *this;
 }
 
-PCM16S &PCM16S::operator=(uint32_t value)
+PCM16S& PCM16S::operator=(uint32_t value)
 {
     sample.value = value;
     return *this;
@@ -40,7 +40,7 @@ PCM16S& PCM16S::operator=(double normalized)
     return *this;
 }
 
-PCM16S &PCM16S::operator=(float normalized)
+PCM16S& PCM16S::operator=(float normalized)
 {
     if (normalized < -1.0f) normalized = -1.0f;
     else if (normalized > 1.0f) normalized = 1.0f;

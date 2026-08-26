@@ -16,7 +16,7 @@
 
 #include "TaskScheduler.hpp"
 
-OS::TaskId OS::TaskScheduler::schedule(void *arg, OptionalBindingAction action, ThreadContext context, TickCount time, TickCount reset)
+OS::TaskId OS::TaskScheduler::schedule(void* arg, OptionalBindingAction action, ThreadContext context, TickCount time, TickCount reset)
 {
     TaskId id = 0;
     for (auto& task : m_tasks)

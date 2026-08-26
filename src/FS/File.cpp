@@ -27,7 +27,7 @@ void FS::File::open()
     m_isOpen = m_status == OK;
 }
 
-FS::File::File(const char *absolutePath, FileMode pMode, ...) : Path(), m_mode(pMode), m_isOpen(false)
+FS::File::File(const char* absolutePath, FileMode pMode, ...) : Path(), m_mode(pMode), m_isOpen(false)
 {
     va_list args;
     va_start(args, pMode);
@@ -36,7 +36,7 @@ FS::File::File(const char *absolutePath, FileMode pMode, ...) : Path(), m_mode(p
     open();
 }
 
-FS::File::File(Path &path, FileMode pMode, ...) : Path(), m_mode(pMode), m_isOpen(false)
+FS::File::File(Path& path, FileMode pMode, ...) : Path(), m_mode(pMode), m_isOpen(false)
 {
     va_list args;
     va_start(args, pMode);
@@ -45,7 +45,7 @@ FS::File::File(Path &path, FileMode pMode, ...) : Path(), m_mode(pMode), m_isOpe
     open();
 }
 
-FS::File::File(const FileSystem *fs, const char *relativePath, FileMode pMode, ...)
+FS::File::File(const FileSystem* fs, const char* relativePath, FileMode pMode, ...)
     : Path(), m_mode(pMode), m_isOpen(false)
 {
     va_list args;
@@ -69,7 +69,7 @@ bool FS::File::seek(FileOffset offset)
     return adapter.fileSeek(m_file, offset) == OK;
 }
 
-FS::ReadResult FS::File::read(void *buffer, size_t size)
+FS::ReadResult FS::File::read(void* buffer, size_t size)
 {
     if (!m_isOpen || !buffer) return ReadResult();
     if (!size) return ReadResult(0);
@@ -77,7 +77,7 @@ FS::ReadResult FS::File::read(void *buffer, size_t size)
     return adapter.fileRead(m_file, buffer, size, bytesRead) == OK ? ReadResult(bytesRead) : ReadResult();
 }
 
-bool FS::File::write(const void *buffer, size_t size)
+bool FS::File::write(const void* buffer, size_t size)
 {
     if (!m_isOpen || !buffer) return false;
     if (!size) return true;

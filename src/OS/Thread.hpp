@@ -40,7 +40,7 @@ public:
     /// @param entry A function that will be called from the thread context. The function will receive `nullptr` as the argument.
     /// @param name Thread name, default `nullptr`.
     /// @param priority Thread priority, default `Priority::normal`.
-    inline void start(ThreadEntry entry, const char *name = nullptr, Priority priority = Priority::normal)
+    inline void start(ThreadEntry entry, const char* name = nullptr, Priority priority = Priority::normal)
     {
         start(nullptr, entry, name, priority);
     }
@@ -52,7 +52,7 @@ public:
     /// @param entry A function that will be called from the thread context.
     /// @param name Thread name, default `nullptr`.
     /// @param priority Thread priority, default `Priority::normal`.
-    void start(void *arg, ThreadEntry entry, const char *name = nullptr, Priority priority = Priority::normal);
+    void start(void* arg, ThreadEntry entry, const char* name = nullptr, Priority priority = Priority::normal);
 
 private:
 

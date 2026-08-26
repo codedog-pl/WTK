@@ -28,7 +28,7 @@ LogUART::~LogUART()
     m_uart = nullptr;
 }
 
-LogUART *LogUART::getInstance(UART_HandleTypeDef *huart, ILogMessagePool &pool)
+LogUART* LogUART::getInstance(UART_HandleTypeDef* huart, ILogMessagePool& pool)
 {
     static LogUART instance(huart, pool);
     return m_instance = &instance;

@@ -35,7 +35,7 @@ const FS::FileSystem* FS::FileSystemTable::add(const char* root, Media* media)
     return entry;
 }
 
-const FS::FileSystem* FS::FileSystemTable::find(const char *path)
+const FS::FileSystem* FS::FileSystemTable::find(const char* path)
 {
     for (const auto& e : entries)
     {
@@ -46,13 +46,13 @@ const FS::FileSystem* FS::FileSystemTable::find(const char *path)
     return nullptr;
 }
 
-const FS::FileSystem* FS::FileSystemTable::find(Media *media)
+const FS::FileSystem* FS::FileSystemTable::find(Media* media)
 {
     for (const auto& e : entries) if (e.m_media == media) return &e;
     return nullptr;
 }
 
-const FS::FileSystem *FS::FileSystemTable::find(FS::MediaType mediaType)
+const FS::FileSystem* FS::FileSystemTable::find(FS::MediaType mediaType)
 {
     for (const auto& e : entries) if (e.m_type == mediaType) return &e;
     return nullptr;
@@ -64,7 +64,7 @@ FS::FileSystem* FS::FileSystemTable::getFree(void)
     return nullptr;
 }
 
-void FS::FileSystemTable::setFree(FileSystem *entry)
+void FS::FileSystemTable::setFree(FileSystem* entry)
 {
     if (!entry) return;
     for (auto& e : entries) if (&e == entry) { e.clear(); return; }

@@ -20,7 +20,7 @@
 OS::Timeout::Timeout(double seconds, Action action)
     : m_taskId(0), m_ticks(WTK_OS_TICKS_PER_SECOND * seconds), m_action(action), m_binding() { }
 
-OS::Timeout::Timeout(double seconds, void *arg, BindingAction action)
+OS::Timeout::Timeout(double seconds, void* arg, BindingAction action)
     : m_taskId(0), m_ticks(WTK_OS_TICKS_PER_SECOND * seconds), m_action(action), m_binding(arg) { }
 
 OS::Timeout::~Timeout()

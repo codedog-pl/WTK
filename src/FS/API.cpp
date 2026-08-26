@@ -32,21 +32,21 @@ const FS::FileSystem* FS::internal()
     return FileSystemTable::find(MediaType::SD);
 }
 
-bool FS::created(const FileSystem *fs, const char *path, DateTime &dateTime)
+bool FS::created(const FileSystem* fs, const char* path, DateTime& dateTime)
 {
     Path context(fs, path);
     if (!context.isValid()) return false;
     return adapter.created(*context.fileSystem()->media(), context.relativePath(), dateTime) == ok;
 }
 
-bool FS::modified(const FileSystem *fs, const char *path, DateTime &dateTime)
+bool FS::modified(const FileSystem* fs, const char* path, DateTime& dateTime)
 {
     Path context(fs, path);
     if (!context.isValid()) return false;
     return adapter.modified(*context.fileSystem()->media(), context.relativePath(), dateTime) == ok;
 }
 
-bool FS::fileCreate(const FileSystem *fs, const char *path, ...)
+bool FS::fileCreate(const FileSystem* fs, const char* path, ...)
 {
     va_list args;
     va_start(args, path);
@@ -56,7 +56,7 @@ bool FS::fileCreate(const FileSystem *fs, const char *path, ...)
     return adapter.fileCreate(*context.fileSystem()->media(), context.relativePath()) == ok;
 }
 
-bool FS::fileExists(const FileSystem *fs, const char *path, ...)
+bool FS::fileExists(const FileSystem* fs, const char* path, ...)
 {
     va_list args;
     va_start(args, path);
@@ -66,7 +66,7 @@ bool FS::fileExists(const FileSystem *fs, const char *path, ...)
     return adapter.fileExists(*context.fileSystem()->media(), context.relativePath()) == ok;
 }
 
-bool FS::fileRename(const FileSystem *fs, const char *oldName, const char *newName, ...)
+bool FS::fileRename(const FileSystem* fs, const char* oldName, const char* newName, ...)
 {
     va_list args1, args2;
     va_start(args1, newName);
@@ -79,7 +79,7 @@ bool FS::fileRename(const FileSystem *fs, const char *oldName, const char *newNa
     return adapter.fileRename(*n1.fileSystem()->media(), n1.relativePath(), n2.relativePath()) == ok;
 }
 
-bool FS::fileDelete(const FileSystem *fs, const char *path, ...)
+bool FS::fileDelete(const FileSystem* fs, const char* path, ...)
 {
     va_list args;
     va_start(args, path);
@@ -89,7 +89,7 @@ bool FS::fileDelete(const FileSystem *fs, const char *path, ...)
     return adapter.fileDelete(*context.fileSystem()->media(), context.relativePath()) == ok;
 }
 
-bool FS::directoryCreate(const FileSystem *fs, const char *path, ...)
+bool FS::directoryCreate(const FileSystem* fs, const char* path, ...)
 {
     va_list args;
     va_start(args, path);
@@ -99,7 +99,7 @@ bool FS::directoryCreate(const FileSystem *fs, const char *path, ...)
     return adapter.directoryCreate(*context.fileSystem()->media(), context.relativePath()) == ok;
 }
 
-bool FS::directoryExists(const FileSystem *fs, const char *path, ...)
+bool FS::directoryExists(const FileSystem* fs, const char* path, ...)
 {
     va_list args;
     va_start(args, path);
@@ -109,7 +109,7 @@ bool FS::directoryExists(const FileSystem *fs, const char *path, ...)
     return adapter.directoryExists(*context.fileSystem()->media(), context.relativePath()) == ok;
 }
 
-bool FS::directoryRename(const FileSystem *fs, const char *oldName, const char *newName, ...)
+bool FS::directoryRename(const FileSystem* fs, const char* oldName, const char* newName, ...)
 {
     va_list args1, args2;
     va_start(args1, newName);
@@ -122,7 +122,7 @@ bool FS::directoryRename(const FileSystem *fs, const char *oldName, const char *
     return adapter.directoryRename(*n1.fileSystem()->media(), n1.relativePath(), n2.relativePath()) == ok;
 }
 
-bool FS::directoryDelete(const FileSystem *fs, const char *path, ...)
+bool FS::directoryDelete(const FileSystem* fs, const char* path, ...)
 {
     va_list args;
     va_start(args, path);

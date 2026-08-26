@@ -52,56 +52,56 @@ double TimeSpan::totalHours() const { return std::fabs(m_value) / 3600.0; }
 
 double TimeSpan::totalDays() const { return std::fabs(m_value) / 86400.0; }
 
-TimeSpan& TimeSpan::operator+=(TimeSpan &other)
+TimeSpan& TimeSpan::operator+=(TimeSpan& other)
 {
     m_value += other.m_value;
     return *this;
 }
 
-TimeSpan &TimeSpan::operator-=(TimeSpan &other)
+TimeSpan& TimeSpan::operator-=(TimeSpan& other)
 {
     m_value -= other.m_value;
     return *this;
 }
 
-TimeSpan &TimeSpan::operator+=(double other)
+TimeSpan& TimeSpan::operator+=(double other)
 {
     m_value += other;
     return *this;
 }
 
-TimeSpan &TimeSpan::operator-=(double other)
+TimeSpan& TimeSpan::operator-=(double other)
 {
     m_value -= other;
     return *this;
 }
 
-bool TimeSpan::operator==(TimeSpan &other) const
+bool TimeSpan::operator==(TimeSpan& other) const
 {
     return eq(m_value, other.m_value);
 }
 
-bool TimeSpan::operator!=(TimeSpan &other) const
+bool TimeSpan::operator!=(TimeSpan& other) const
 {
     return !eq(m_value, other.m_value);
 }
 
-bool TimeSpan::operator<=(TimeSpan &other) const
+bool TimeSpan::operator<=(TimeSpan& other) const
 {
     return m_value <= other.m_value;
 }
 
-bool TimeSpan::operator>=(TimeSpan &other) const
+bool TimeSpan::operator>=(TimeSpan& other) const
 {
     return m_value >= other.m_value;
 }
 
-bool TimeSpan::operator<(TimeSpan &other) const
+bool TimeSpan::operator<(TimeSpan& other) const
 {
     return m_value < other.m_value;
 }
 
-bool TimeSpan::operator>(TimeSpan &other) const
+bool TimeSpan::operator>(TimeSpan& other) const
 {
     return m_value > other.m_value;
 }
