@@ -1,0 +1,49 @@
+# Visual Studio user-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Visual Studio cache/options directory
+**/.vs/
+
+# TouchGFX build directories
+**/TouchGFX/build/
+
+# Generated build files
+*.d
+*.o
+*.su
+*.elf
+*.ods#
+*.bin
+*.cache
+*.cyclo
+*.hex
+*.list
+*.map
+**/.settings/language.settings.xml
+Tests/build
+
+# Ki-Cad
+
+**/*.bak
+**/_autosave*
+*auto*save*
+
+# Various user configuration
+
+**/subdir.mk
+**/*.*_cache
+**/TouchGFX/generated/user.config
+**/TouchGFX/config/msvs/Application.props
+**/*-cache.*
+
+CM7/TouchGFX/simulator/msvs/Application.vcxproj.filters
+Drivers/CMSIS/Device/ST/STM32H7xx/LICENSE.txt
+Drivers/CMSIS/LICENSE.txt
+Drivers/STM32H7xx_HAL_Driver/LICENSE.txt
+
+# Archives
+*.zip
