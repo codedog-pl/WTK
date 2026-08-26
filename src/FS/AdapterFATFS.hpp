@@ -72,6 +72,12 @@ public:
     /// @returns Status.
     Status fileOpen(Media& media, FileControlBlock& file, const char* path, FileMode mode = FileMode::read) const override;
 
+    /// @brief Allocates file storage space up front.
+    /// @param file File handle reference.
+    /// @param size Number of bytes to allocate.
+    /// @return Status.
+    Status fileAllocate(FileControlBlock& file, size_t size) const override;
+
     /// @brief Moves the file pointer to the specified offset.
     /// @param file File handle reference.
     /// @param offset Position within the file.

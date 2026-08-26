@@ -73,7 +73,7 @@ FS::AdapterTypes::Status FS::AdapterFILEX::fileOpen(Media &media, FileControlBlo
     UINT fxMode = 0;
     UINT fxStatus = FX_SUCCESS;
     if ((mode & write) || (mode & createNew)) timeUpdate();
-    if (mode & read) fxMode = (mode & write) ? FX_OPEN_FOR_READ : FX_OPEN_FOR_READ_FAST;
+    if (mode & read) fxMode = (mode & write) ? FX_OPEN_FOR_WRITE : FX_OPEN_FOR_READ_FAST;
     else if (mode & write) fxMode = FX_OPEN_FOR_WRITE;
     if (mode & createNew)
     {
@@ -94,48 +94,65 @@ FS::AdapterTypes::Status FS::AdapterFILEX::fileOpen(Media &media, FileControlBlo
     return fxStatus;
 }
 
-FS::AdapterTypes::Status FS::AdapterFILEX::fileSeek(FileControlBlock &file, FileOffset offset) const
+FS::AdapterTypes::Status FS::AdapterFILEX::fileAllocate(FileControlBlock& file, size_t size) const
+{
+    auto result = fx_file_extended_seek(&file, 0);
+    if (result != OK) return result;
+    constexpr size_t blockSize = 1024;
+    uint8_t zeroes[blockSize] = {};
+    size_t bytesLeft = size;
+    while (bytesLeft)
+    {
+        size_t writeSize = bytesLeft < blockSize ? bytesLeft : blockSize;
+        result = fx_file_write(&file, zeroes, writeSize);
+        if (result != OK) return result;
+        bytesLeft -= writeSize;
+    }
+    return fx_file_extended_seek(&file, 0);
+}
+
+FS::AdapterTypes::Status FS::AdapterFILEX::fileSeek(FileControlBlock& file, FileOffset offset) const
 {
     return fx_file_seek(&file, offset);
 }
 
-FS::AdapterTypes::Status FS::AdapterFILEX::fileRead(FileControlBlock &file, void *buffer, size_t size, size_t &bytesRead) const
+FS::AdapterTypes::Status FS::AdapterFILEX::fileRead(FileControlBlock& file, void *buffer, size_t size, size_t &bytesRead) const
 {
     auto result = fx_file_read(&file, buffer, size, (ULONG*)&bytesRead);
     if (result == FX_END_OF_FILE) result = FX_SUCCESS;
     return result;
 }
 
-FS::AdapterTypes::Status FS::AdapterFILEX::fileWrite(FileControlBlock &file, const void *buffer, size_t size) const
+FS::AdapterTypes::Status FS::AdapterFILEX::fileWrite(FileControlBlock& file, const void *buffer, size_t size) const
 {
     timeUpdate();
     return fx_file_write(&file, const_cast<void*>(buffer), size);
 }
 
-FS::AdapterTypes::Status FS::AdapterFILEX::fileClose(FileControlBlock &file) const
+FS::AdapterTypes::Status FS::AdapterFILEX::fileClose(FileControlBlock& file) const
 {
     timeUpdate();
     return fx_file_close(&file);
 }
 
-FS::AdapterTypes::Status FS::AdapterFILEX::fileRename(Media &media, const char *oldName, const char *newName) const
+FS::AdapterTypes::Status FS::AdapterFILEX::fileRename(Media& media, const char *oldName, const char *newName) const
 {
     timeUpdate();
     return fx_file_rename(&media, (CHAR*)oldName, (CHAR*)newName);
 }
 
-FS::AdapterTypes::Status FS::AdapterFILEX::fileDelete(Media &media, const char *path) const
+FS::AdapterTypes::Status FS::AdapterFILEX::fileDelete(Media& media, const char *path) const
 {
     return fx_file_delete(&media, (CHAR*)path);
 }
 
-FS::AdapterTypes::Status FS::AdapterFILEX::directoryCreate(Media &media, const char *path) const
+FS::AdapterTypes::Status FS::AdapterFILEX::directoryCreate(Media& media, const char *path) const
 {
     timeUpdate();
     return fx_directory_create(&media, (CHAR*)path);
 }
 
-FS::AdapterTypes::Status FS::AdapterFILEX::directoryExists(Media &media, const char *path) const
+FS::AdapterTypes::Status FS::AdapterFILEX::directoryExists(Media& media, const char *path) const
 {
     DirectoryEntry entry = {};
     Status result = find(media, path, entry);
@@ -143,13 +160,13 @@ FS::AdapterTypes::Status FS::AdapterFILEX::directoryExists(Media &media, const c
     return (entry.fx_dir_entry_attributes & FX_VOLUME) == 0 && (entry.fx_dir_entry_attributes & FX_DIRECTORY) != 0;
 }
 
-FS::AdapterTypes::Status FS::AdapterFILEX::directoryRename(Media &media, const char *oldName, const char *newName) const
+FS::AdapterTypes::Status FS::AdapterFILEX::directoryRename(Media& media, const char *oldName, const char *newName) const
 {
     timeUpdate();
     return fx_directory_rename(&media, (CHAR*)oldName, (CHAR*)newName);
 }
 
-FS::AdapterTypes::Status FS::AdapterFILEX::directoryDelete(Media &media, const char *path) const
+FS::AdapterTypes::Status FS::AdapterFILEX::directoryDelete(Media& media, const char *path) const
 {
     return fx_directory_delete(&media, (CHAR*)path);
 }
@@ -165,7 +182,7 @@ FS::AdapterTypes::Status FS::AdapterFILEX::timeUpdate() const
     return status;
 }
 
-FS::AdapterTypes::Status FS::AdapterFILEX::initializeEntry(Media &media, DirectoryEntry &entry)
+FS::AdapterTypes::Status FS::AdapterFILEX::initializeEntry(Media& media, DirectoryEntry &entry)
 {
     Status result = OK;
     if (media.fx_media_id != FX_MEDIA_ID) return FX_MEDIA_NOT_OPEN; // Exit early if the media is not open.
@@ -178,7 +195,7 @@ FS::AdapterTypes::Status FS::AdapterFILEX::initializeEntry(Media &media, Directo
     return result;
 }
 
-void FS::AdapterFILEX::toDateTime(UINT date, UINT time, DateTime &dateTime)
+void FS::AdapterFILEX::toDateTime(UINT date, UINT time, DateTime& dateTime)
 {
     dateTime.year = ((date >> FX_YEAR_SHIFT) & FX_YEAR_MASK) + FX_BASE_YEAR;
     dateTime.month = (date >> FX_MONTH_SHIFT) & FX_MONTH_MASK;

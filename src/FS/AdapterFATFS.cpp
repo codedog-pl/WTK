@@ -75,6 +75,11 @@ FS::AdapterTypes::Status FS::AdapterFATFS::fileOpen(Media &media, FileControlBlo
     return f_open(&file, context.absolutePath(), (BYTE)mode);
 }
 
+FS::AdapterTypes::Status FS::AdapterFILEX::fileAllocate(FileControlBlock& file, size_t size) const
+{
+    return f_expand(&file, size, 0);
+}
+
 FS::AdapterTypes::Status FS::AdapterFATFS::fileSeek(FileControlBlock &file, FileOffset offset) const
 {
     return f_lseek(&file, offset);

@@ -57,6 +57,12 @@ FS::File::File(const FileSystem *fs, const char *relativePath, FileMode pMode, .
 
 FS::File::~File() { close(); }
 
+bool FS::File::allocate(size_t size)
+{
+    if (!m_isOpen) return false;
+    return adapter.fileAllocate(m_file, size) == OK;
+}
+
 bool FS::File::seek(FileOffset offset)
 {
     if (!m_isOpen) return false;

@@ -77,6 +77,12 @@ public:
     /// @returns Status.
     virtual Status fileOpen(Media& media, FileControlBlock& file, const char* path, FileMode mode = FileMode::read) const = 0;
 
+    /// @brief Allocates file storage space up front.
+    /// @param file File handle reference.
+    /// @param size Number of bytes to allocate.
+    /// @return Status.
+    virtual Status fileAllocate(FileControlBlock& file, size_t size) const = 0;
+
     /// @brief Moves the file pointer to the specified offset.
     /// @param file File handle reference.
     /// @param offset Position within the file.

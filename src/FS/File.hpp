@@ -56,6 +56,11 @@ struct File final : public Path
     /// @returns True if the file is actially successfully open.
     inline operator bool() const { return m_isOpen; }
 
+    /// @brief Allocates contiguous, adjacent clusters to the file.
+    /// @param size Number of bytes to allocate.
+    /// @return True if done. False otherwise.
+    bool allocate(size_t size);
+
     /// @brief Moves the read / write pointer to the specified offset in the file.
     /// @param offset File offset.
     /// @returns True if done. False otherwise.
